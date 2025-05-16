@@ -50,7 +50,7 @@ form.addEventListener('submit', function(event) {
         ];
     } else if (form.id === 'registerForm') {
         fields = [
-            {id: 'register-username', name: 'Username', required: true},
+            {id: 'register-username', name: 'Username', required: true, minLength: 3, maxLength: 20},
             {id: 'email', name: 'Email', required: true, type: 'email'},
             {id: 'register-password', name: 'Password', required: true, type: 'password'},
             {id: 'confirm-password', name: 'Confirm Password', required: true, match: 'register-password'}
@@ -82,11 +82,19 @@ form.addEventListener('submit', function(event) {
             return;
         }
 
+        if (f.minLength && value.length < f.minLength) {
+            showError(f.element, `${f.name} must be at least ${f.minLength} characters`);
+            console.log(`Validation failed: ${f.name} field is less than ${f.minLength} characters`);
+            error = true;
+            return;
+        }
+
         // Check if field exceeds maxLength if defined
         if (f.maxLength && value.length > f.maxLength) {
             showError(f.element, `${f.name} cannot be more than ${f.maxLength} characters`);
             console.log(`Validation failed: ${f.name} field exceeds ${f.maxLength} characters`);
             error = true;
+            return;
         }
 
         // Check if email format is valid if type is email
