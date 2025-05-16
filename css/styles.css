@@ -283,7 +283,7 @@ main{
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   box-shadow: 0 5px 32px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: box-shadow 0.3s ease;
   position: relative;
   overflow: hidden;
 }
@@ -305,8 +305,7 @@ main{
   pointer-events: none;
 }
 
-.blog-post:hover{
-  transform: translateY(-5px);
+.blog-post:hover {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
