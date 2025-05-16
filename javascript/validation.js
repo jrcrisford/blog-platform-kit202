@@ -117,6 +117,22 @@ form.addEventListener('submit', function(event) {
         }
     });
 
+    form.addEventListener('reset', function() {
+        console.log('Form reset detected - clearing errors');
+        
+        let fieldIds = [];
+        if (form.id === 'writePostForm') {
+            fieldIds = ['title', 'tags', 'content'];
+        } else if (form.id === 'loginForm') {
+            fieldIds = ['username', 'password'];
+        } else if (form.id === 'registerForm') {
+            fieldIds = ['register-username', 'email', 'register-password', 'confirm-password'];
+        }
+
+        const fields = fieldIds.map(id => document.getElementById(id));
+        clearErrors(fields);
+    });
+
     // Simulate post submission by redirecting to home page
     if (!error) {
         console.log('Form validation successful - redirecting to home page');
