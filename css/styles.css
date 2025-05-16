@@ -350,23 +350,24 @@ main{
 
 /* Older posts styling */
 .toggle-content-btn {
-  width: 100%;
-  border: none;
-  padding: 1rem;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  width: fit-content;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   color: var(--text-color);
-  cursor: pointer;
-  transition: all 0.3 ease;
-  border-radius: 8px;
   border: 1px solid var(--glass-border);
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  border-radius: 6px;
   font-weight: 500;
-  margin: 1rem 0;
+  margin: 0.5rem 0;
 }
 
 .toggle-content-btn:hover {
   background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
 }
 
 /* Form Styling*/
