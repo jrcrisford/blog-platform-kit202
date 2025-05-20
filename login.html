@@ -8,7 +8,7 @@
             if (localStorage.getItem("theme") === "dark") {document.documentElement.classList.add("dark-mode");}
         </script> 
         <link rel="stylesheet" href="css/styles.css">
-        <script src="javascript/validation.js" defer></script>
+        <script src="javascript/validation.js?V=2" defer></script>
         <script src="javascript/ui_behaviour.js" defer></script>
         <title>Login Page</title>
     </head>
@@ -64,7 +64,7 @@
                 
                 <section>
                     <!-- Login Form -->
-                    <form class="auth-form" id="loginForm" novalidate>
+                    <form class="auth-form" id="loginForm" novalidate method="POST" action="login.php">
 
                         <label for="username">Username:</label>
                         <input type="text" id="username" name="username">
