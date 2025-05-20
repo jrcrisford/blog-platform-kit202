@@ -30,7 +30,6 @@ function clearErrors(fields) {
 form.addEventListener('submit', function(event) {
     
     // Stop immediate submission of form
-    event.preventDefault(); 
     console.log(`${form.id} submission detected - validating fields`);
 
     // Array to hold input fields
@@ -141,9 +140,11 @@ form.addEventListener('submit', function(event) {
         clearErrors(fields);
     });
 
-    // Simulate post submission by redirecting to home page
-    if (!error) {
-        console.log('Form validation successful - redirecting to home page');
-        window.location.href = 'index.html';
+    if (error) {
+        event.preventDefault();
+        console.log('Form blocked due to validation errors');
+    } else {
+        console.log('Form passed validation');
     }
+
 });
