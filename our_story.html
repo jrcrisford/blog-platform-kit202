@@ -213,13 +213,24 @@
                         </tr>
                         <tr>
                             <td>2025-04-11</td>
-                            <td>Built upon the initial glassmorphism setup and finalized the styling using the same design approach for a cohesive aesthetic.</td>
+                            <td>Finalised the UI design</td>
                             <td>Dipen Subedi</td>
                         </tr>
                         <tr>
                             <td>2025-05-16</td>
                             <td>Frontend Polish Based on AT1 Feedback</td>
                             <td>Joshua Crisford</td>
+                        </tr>
+                        <tr>
+                            <td>2025-05-17</td>
+                            <td>Database Design and Implementation Complete</td>
+                            <td>Joshua Crisford</td>
+                        </tr>
+                        <tr>
+                            <td>2025-05-20</td>
+                            <td>Login and Register Backend Integration</td>
+                            <td>Joshua Crisford</td>
+                        </tr>
                     </table>
                 </div>
             </section>
@@ -419,6 +430,46 @@
                                 <li>Removed the hover layout shift on blog post cards by eliminating the transform animation and fixing shadow transitions.</li>
                             </ul>
                             These changes improve the user experience, address the feedback from the AT1 marker, and set a solid foundation for the upcoming backend content.
+                        </p>
+                    </div>
+                </article>
+
+                <article class="blog-post">
+                    <h3>Database Design and Implementation Complete</h3>
+                    <p class="post-meta">Posted on 2025-05-17 by Joshua Crisford</p>
+                    <button onclick="toggleContent(this)">Show Content</button>
+                    <div class="post-content hidden">
+                        <p>
+                            Today I completed the full database design and implementation for the blog, laying the foundation for the backend functionality to follow.
+                            This included designing the Entity Relationship Diagram (ERD) using Crow’s Foot notation with all the required entities, plus additional ones to support HD-level features: users, posts, tags, comments, and ratings.
+                            I ensured all relationships and constraints were clearly defined where appropriate. An in-depth data dictionary was also created to outline the structure of each table, including rules and example data values.
+                        </p>
+                        <p>
+                            With the design finalised, I implemented the schema in phpMyAdmin using SQL <code>CREATE TABLE</code> statements (I prefer writing raw SQL rather than using the GUI), and inserted test data across all tables to prepare for backend development.
+                            This confirmed that the database worked as intended and according to the designed schema, and was ready to support dynamic content through PHP.
+                        </p>
+                    </div>
+                </article>
+
+                <article class="blog-post">
+                    <h3>Login and Register Backend Integration</h3>
+                    <p class="post-meta">Posted on 2025-05-20 by Joshua Crisford</p>
+                    <button onclick="toggleContent(this)">Show Content</button>
+                    <div class="post-content hidden">
+                        <p>
+                            Today I implemented the login and registration systems using PHP and connected them to the database.
+                            The <code>register.php</code> script accepts input from the registration form, checks for issues like duplicate usernames or emails, hashes the password, and stores the new user in the database with the default role of “member”.
+                            The <code>login.php</code> script retrieves the user by their username, verifies the password using <code>password_verify()</code>, stores the relevant user information in PHP session variables, and redirects to the (soon-to-be-built) PHP version of the homepage.
+                        </p>
+                        <p>
+                            I encountered a major issue during development caused by the browser caching an older version of <code>validation.js</code>.
+                            Despite updating the JavaScript file on the web server, the browser continued executing the outdated version, which redirected users to <code>index.html</code> and bypassed the backend PHP scripts entirely.
+                            The issue was resolved by appending <code>?v=3</code> to the <code>&lt;script&gt;</code> tag in each HTML file using the validation script.
+                            A very simple fix for a problem that took hours to track down!
+                        </p>
+                        <p>
+                            To simplify future development, I also created a shared <code>db_connect.php</code> file that handles the database connection.
+                            This file can now be included in any PHP script using <code>require_once</code>, removing the need to repeat connection logic in every file.
                         </p>
                     </div>
                 </article>
