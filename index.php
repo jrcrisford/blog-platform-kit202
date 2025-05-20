@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -36,7 +39,13 @@
                         <li><a href="index.html" class="active">Homepage</a></li>
                         <li><a href="older.html">Older Posts</a></li>
                         <li><a href="write.html">Write Post</a></li>
-                        <li><a href="login.html">Login</a></li>
+                        <?php if (isset($_SESSION['username'])): ?>
+                            <li>Logged in as <?php echo htmlspecialchars($_SESSION['username']); ?></li>
+                            <li><a href="logout.php">Logout</a></li>
+                        <?php else: ?>
+                            <li><a href="login.html">Login</a></li>
+                            <li><a href="register.html">Register</a></li>
+                        <?php endif; ?>
                         <li><a href="our_story.html">Our Story</a></li>
                         
                         <!-- Theme Toggle Switch -->
