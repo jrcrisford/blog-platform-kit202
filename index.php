@@ -82,11 +82,26 @@
                 if ($posts) {
                     foreach ($posts as $post) {
                         echo '<article class="blog-post"';
-                        echo '<h3>' . htmlspecialchars($post)
+                        echo '<h3>' . htmlspecialchars($post['title']) . '</h3>';
+                        echo '<div class="post-content">';
+                        echo '<p>' . htmlspecialchars($post['content']) . '</p>';
+                        echo '</div>';
+                        echo '<p>Posted on ' . htmlspecialchars($post['postDate']) . ' by ' . htmlspecialchars($post['author']) . '</p>';
+                        echo '<p>';
+                        foreach (explode(',', $post['tags']) as $tag) {
+                            echo '<span class="tags">' . htmlspecialchars(trim($tag)) . '</span> ';
+                        }
+                        echo '</p>';
+                        echo '</article>';
                     }
+                } else {
+                    echo '<article class="blog-post">';
+                    echo '<p>No posts available.</p>';
+                    echo '</article>';
                 }
+                ?>
 
-                <article class="blog-post">
+               <!-- <article class="blog-post">
                     <h3>Arsenal win Big against Real Madrid on Champions League Quarter Finals</h3>
                     <div class="post-content">
                         <p>Arsenal and Madrid, giants of their own leagues played a match last Wednesday on Emirates stadium. The home team bagged a victory against 
@@ -145,7 +160,7 @@
                         <span class="tags">Quidem</span>
                     </p>
                 </article>
-
+            -->
             </section>
         </main>
 

@@ -106,21 +106,39 @@
 
         // Get the author name for each post
         foreach ($posts as &$post) {
-            $authorID = $post[`userID`];
+        // Check if userID exists and is not empty
+        if (isset($post['userID']) && !empty($post['userID'])) {
+            $authorID = $post['userID'];
             $author = getUserByID($authorID);
-            $post['author'] = $author['username'];
+            // Check if author was found
+            if ($author && isset($author['username'])) {
+                $post['author'] = $author['username'];
+            } else {
+                $post['author'] = 'Unknown Author';
+            }
+        } else {
+            $post['author'] = 'Unknown Author';
         }
+    }
 
         // Get the tags for each post
         foreach ($posts as &$post) {
+        if (isset($post['postID']) && !empty($post['postID'])) {
             $tags = getPostTagsByID($post['postID']);
             $tagNames = [];
             foreach ($tags as $tag) {
-                $tagDetails = getTagByID($tag['tagID']);
-                $tagNames[] = $tagDetails['name'];
+                if (isset($tag['tagID']) && !empty($tag['tagID'])) {
+                    $tagDetails = getTagByID($tag['tagID']);
+                    if ($tagDetails && isset($tagDetails['name'])) {
+                        $tagNames[] = $tagDetails['name'];
+                    }
+                }
             }
             $post['tags'] = implode(', ', $tagNames);
+        } else {
+            $post['tags'] = '';
         }
+    }
 
         $stmt->close();
         disconnect($conn);
