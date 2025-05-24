@@ -1,5 +1,7 @@
 <?php
-session_start();
+    include_once 'db_connect.php';
+    // Fetches most recent posts from the databse
+    $posts = getPosts(3);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +26,7 @@ session_start();
 
                     <!-- Logo -->
                     <div class="logo">
-                        <a href="index.html">
+                        <a href="index.php">
                             <img src="logos/horizontal_logo_dark.png" id="site-logo" alt="Logo Horizonal Dark" class="site-logo">
                         </a>
                     </div>
@@ -36,7 +38,7 @@ session_start();
 
                     <!-- Navigation Links -->
                     <ul class="nav-links" id="navLinks">
-                        <li><a href="index.html" class="active">Homepage</a></li>
+                        <li><a href="index.php" class="active">Homepage</a></li>
                         <li><a href="older.html">Older Posts</a></li>
                         <li><a href="write.html">Write Post</a></li>
                         <?php if (isset($_SESSION['username'])): ?>
@@ -74,6 +76,15 @@ session_start();
 
             <!-- Blog Post Section -->
             <section id="latest-posts">
+
+                <?php
+                // Display the most recent post
+                if ($posts) {
+                    foreach ($posts as $post) {
+                        echo '<article class="blog-post"';
+                        echo '<h3>' . htmlspecialchars($post)
+                    }
+                }
 
                 <article class="blog-post">
                     <h3>Arsenal win Big against Real Madrid on Champions League Quarter Finals</h3>
