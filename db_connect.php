@@ -19,7 +19,7 @@
         }
         return $conn;
     }
-    
+
     // Create a new user
     function insertUser($username, $email, $password) {
         $conn = connect();
@@ -38,4 +38,126 @@
         } else {
             return false;
     }
+
+    //Get user by ID
+    function getUserByID($userID) {
+        $conn = connect();
+        $sql = "SELECT username FROM `User` WHERE userID = ?";
+        $stmt = $conn->prepare($sql);
+        if (!$stmt) {
+            die("Prepare failed: " . $conn->error);
+        }
+        $stmt->bind_param("i", $userID);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+        $stmt->close();
+        disconnect($conn);
+        return $user;
+    }
+
+    // Get user by Username
+    function getUserByUsername($username) {
+        $conn = connect();
+        $sql = "SELECT * FROM `User` WHERE username = ?";
+        $stmt = $conn->prepare($sql);
+        if (!$stmt) {
+            die("Prepare failed: " . $conn->error);
+        }
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+        $stmt->close();
+        disconnect($conn);
+        return $user;
+    }
+
+    //Get user by email
+    function getUserByEmail($email) {
+        $conn = connect();
+        $sql = "SELECT * FROM `User` WHERE email = ?";
+        $stmt = $conn->prepare($sql);
+        if (!$stmt) {
+            die("Prepare failed: " . $conn->error);
+        }
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+        $stmt->close();
+        disconnect($conn);
+        return $user;
+    }
+
+    // Get posts
+    function getPosts($limit) {
+        $conn = connect();
+        $sql = "SELECT * FROM `Post` ORDER BY `postDate` DESC LIMIT ?";
+        $stmt = $conn->prepare($sql);
+        if (!$stmt) {
+            die("Prepare failed: " . $conn->error);
+        }
+        $stmt->bind_param("i", $limit);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $posts = $result->fetch_all(MYSQLI_ASSOC);
+
+        // Get the author name for each post
+        foreach ($posts as &$post) {
+            $authorID = $post[`userID`];
+            $author = getUserByID($authorID);
+            $post['author'] = $author['username'];
+        }
+
+        // Get the tags for each post
+        foreach ($posts as &$post) {
+            $tags = getPostTagsByID($post['postID']);
+            $tagNames = [];
+            foreach ($tags as $tag) {
+                $tagDetails = getTagByID($tag['tagID']);
+                $tagNames[] = $tagDetails['name'];
+            }
+            $post['tags'] = implode(', ', $tagNames);
+        }
+
+        $stmt->close();
+        disconnect($conn);
+        return $posts;
+    }
+
+    function getPostTagsByID($postID) {
+        $conn = connect();
+        $sql = "SELECT * FROM `PostTag` WHERE postID = ?";
+        $stmt = $conn->prepare($sql);
+        if (!$stmt) {
+            die("Prepare failed: " . $conn->error);
+        }
+        $stmt->bind_param("i", $postID);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $tags = $result->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+        disconnect($conn);
+        return $tags;
+    }
+
+    function getTagByID($tagID) {
+        $conn = connect();
+        $sql = "SELECT * FROM `Tag` WHERE tagID = ?";
+        $stmt = $conn->prepare($sql);
+        if (!$stmt) {
+            die("Prepare failed: " . $conn->error);
+        }
+        $stmt->bind_param("i", $tagID);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $tag = $result->fetch_assoc();
+        $stmt->close();
+        disconnect($conn);
+        return $tag;
+    }
+
+    function disconnect($conn) {
+        $conn->close();
 }
