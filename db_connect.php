@@ -37,6 +37,7 @@
             return true;
         } else {
             return false;
+        }
     }
 
     //Get user by ID
@@ -161,4 +162,3 @@
     function disconnect($conn) {
         $conn->close();
     }
-}
