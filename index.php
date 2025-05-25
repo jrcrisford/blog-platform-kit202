@@ -1,7 +1,7 @@
 <?php
     include_once 'db_connect.php';
     // Fetches most recent posts from the databse
-    $posts = getPosts(3);
+    $posts = getPosts(10,0);
 ?>
 <!DOCTYPE html>
 <html lang="en">
