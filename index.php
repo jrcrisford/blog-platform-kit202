@@ -1,4 +1,5 @@
 <?php
+
     include_once 'db_connect.php';
     // Fetches most recent posts from the databse
     if (session_status() === PHP_SESSION_NONE) {
@@ -8,6 +9,9 @@
     $conn = connect();
     $posts = getPosts($conn, 3, 0);
     disconnect($conn);
+
+session_start();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
