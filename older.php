@@ -1,3 +1,10 @@
+<?php
+    include_once 'db_connect.php';
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    $posts = getPosts(3,0);
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -21,7 +28,7 @@
 
                     <!-- Logo -->
                     <div class="logo">
-                        <a href="index.html">
+                        <a href="index.php">
                             <img src="logos/horizontal_logo_dark.png" id="site-logo" alt="Logo Horizonal Dark" class="site-logo">
                         </a>
                     </div>
@@ -33,8 +40,8 @@
 
                     <!-- Navigation Links -->
                     <ul class="nav-links" id="navLinks">
-                        <li><a href="index.html">Homepage</a></li>
-                        <li><a href="older.html" class="active">Older Posts</a></li>
+                        <li><a href="index.php">Homepage</a></li>
+                        <li><a href="older.php" class="active">Older Posts</a></li>
                         <li><a href="write.html">Write Post</a></li>
                         <li><a href="login.html">Login</a></li>
                         <li><a href="our_story.html">Our Story</a></li>
@@ -62,7 +69,31 @@
                 <p> Here are some of the older posts.</p>
              </section>
 
-            
+            <?php
+                if (empty($posts)){
+                    echo '<article class="blog-post">';
+                    echo '<p>No older posts available.</p>';
+                    echo '</article>';
+                } else {
+                    foreach ($posts as $post){
+                        echo '<article class="blog-post">';
+                        echo '<h3>' . htmlspecialchars($post['title']) . '</h3>';
+                        echo '<button class="toggle-content-btn" onclick="toggleContent(this)">Show Content</button>';
+                        echo '<div class="post-content hidden">';
+                        echo'<p>' . htmlspecialchars($post['content']) . '</p>';
+                        echo '</div>';
+                        echo '<p>Posted on' . htmlspecialchars($post['postDate']) . ' by ' . htmlspecialchars($post['author']) . '</p>';
+                        echo '<p>';
+                            foreach (explode(',', $post['tags']) as $tag){
+                                    echo '<span class="tags">' . htmlspecialchars(trim($tag)) . '</span> ';
+                                }
+                        echo '</p>';
+                        echo '</article>';
+                    }
+                }
+             ?>
+
+            <!--
             <article class="blog-post">
 
                 <h3>Old Post One</h3>
@@ -84,8 +115,9 @@
                     <span class="tags">Doloribus</span>
                 </p>
             </article>
+        
 
-            <!-- Blog Post 2 -->
+          
              <article class="blog-post">
 
                 <h3>Old Post Two</h3>
@@ -108,7 +140,7 @@
                 </p>
              </article>
 
-            <!-- Blog Post 3 -->
+            
             <article class="blog-post">
 
                 <h3>Old Post Three</h3>
@@ -131,7 +163,7 @@
                 </p>
             </article>
 
-            <!-- Blog Post 4 -->
+            
             <article class="blog-post">
 
                 <h3>Old Post Four</h3>
@@ -153,6 +185,7 @@
                     <span class="tags">Alias</span>
                 </p>
             </article>
+        -->
 
         </main>
 
