@@ -1,7 +1,9 @@
 <?php
     include_once 'db_connect.php';
-    session_start();
-    $posts = getPosts(3,3);
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    $posts = getPosts(3,0);
 ?>
 <!DOCTYPE html>
 <html lang="en">
