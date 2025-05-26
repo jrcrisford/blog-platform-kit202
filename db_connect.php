@@ -10,6 +10,7 @@
         $user = "kit202-group-26";
         $password = "VwDePHbkyUxM";
         $dbname = "kit202-group-26";
+        
 
         // Connect to the database
         $conn = new mysqli($host, $user, $password, $dbname);
