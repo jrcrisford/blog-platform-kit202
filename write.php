@@ -31,10 +31,10 @@
         disconnect($conn);
 
         if ($result) {
-            // Redirect to homepage after successful post creation
+        // Redirect to the homepage or display a success message
             echo "<script>alert('Post created successfully!');</script>";
             header("Location: index.php");
-            exit();
+        exit(); 
         } else {
             // Handle error (e.g., display an error message)
             echo "<script>alert('Error creating post. Please try again.');</script>";
@@ -69,7 +69,7 @@
 
                     <!-- Logo -->
                     <div class="logo">
-                        <a href="index.php">
+                        <a href="index.html">
                             <img src="logos/horizontal_logo_dark.png" id="site-logo" alt="Logo Horizonal Dark" class="site-logo">
                         </a>
                     </div>
@@ -118,7 +118,7 @@
                 <span class="error-message" id="title-error"></span>
 
                 <label for="tags">Tags/Keywords</label>
-                <input type="text" id="tags" name="tags">
+                <input type="text" id="tags" name="tags" placeholder="e.g. Football, Sports">
                 <span class="error-message" id="tags-error"></span>
 
                 <label for="content">Content:</label>
