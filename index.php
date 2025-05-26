@@ -1,7 +1,6 @@
 <?php
 
     include_once 'db_connect.php';
-    // Fetches most recent posts from the databse
     if (session_status() === PHP_SESSION_NONE) {
         session_start();
     }
@@ -9,10 +8,8 @@
     $conn = connect();
     $posts = getPosts($conn, 3, 0);
     disconnect($conn);
-
-session_start();
-
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -51,16 +48,16 @@ session_start();
                         <li><a href="index.php" class="active">Homepage</a></li>
                         <li><a href="older.php">Older Posts</a></li>
                         <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'author'): ?>
-                            <li><a href="write.php">Write Post</a></li>
+                        <li><a href="write.php">Write Post</a></li>
                         <?php else: ?>
                         <?php if (isset($_SESSION['username'])): ?>
                             <li>Logged in as <?php echo htmlspecialchars($_SESSION['username']); ?></li>
                             <li><a href="logout.php">Logout</a></li>
                         <?php else: ?>
                             <li><a href="login.php">Login</a></li>
-                            <li><a href="register.php">Register</a></li>
-                        <?php endif; ?>
-                        <li><a href="our_story.html">Our Story</a></li>
+                             <li><a href="register.php">Register</a></li>
+                            <?php endif; ?>
+                         <li><a href="our_story.html">Our Story</a></li>
                         
                         <!-- Theme Toggle Switch -->
                         <li class="theme-toggle-container">

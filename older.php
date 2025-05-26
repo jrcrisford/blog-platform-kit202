@@ -3,7 +3,9 @@
     if (session_status() === PHP_SESSION_NONE) {
         session_start();
     }
-    $posts = getPosts(3,0);
+    $conn = connect();
+    $posts = getPosts($conn , 3, 3);
+    disconnect($conn);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -42,8 +44,10 @@
                     <ul class="nav-links" id="navLinks">
                         <li><a href="index.php">Homepage</a></li>
                         <li><a href="older.php" class="active">Older Posts</a></li>
-                        <li><a href="write.html">Write Post</a></li>
-                        <li><a href="login.html">Login</a></li>
+                        <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'author'): ?>
+                        <li><a href="write.php">Write Post</a></li>
+                        <?php else: ?>
+                        <li><a href="login.php">Login</a></li>
                         <li><a href="our_story.html">Our Story</a></li>
                         
                         <!-- Theme Toggle Switch -->
