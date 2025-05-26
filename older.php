@@ -48,7 +48,7 @@
                         <li><a href="write.php">Write Post</a></li>
                         <?php else: ?>
                         <li><a href="login.php">Login</a></li>
-                        <li><a href="our_story.html">Our Story</a></li>
+                        <li><a href="our_story.php">Our Story</a></li>
                         
                         <!-- Theme Toggle Switch -->
                         <li class="theme-toggle-container">

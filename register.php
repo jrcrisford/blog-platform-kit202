@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <!-- Logo -->
                     <div class="logo">
-                        <a href="index.html">
+                        <a href="index.php">
                             <img src="logos/horizontal_logo_dark.png" id="site-logo" alt="Logo Horizonal Dark" class="site-logo">
                         </a>
                     </div>

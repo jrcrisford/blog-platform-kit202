@@ -1,6 +1,6 @@
 <?php
     // Include database connection
-    include_once 'db.php';
+    include_once 'db_connect.php';
 
     if (session_status() === PHP_SESSION_NONE) {
         session_start();
