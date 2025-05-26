@@ -1,6 +1,6 @@
 <?php
     require_once 'db_connect.php';
-    if (session_start() === PHP_SESSION_NONE) {
+    if (session_status() === PHP_SESSION_NONE) {
         session_start();
     }
 
@@ -11,8 +11,7 @@
 
         // Query to fetch the user by username
         $conn = connect();
-        $user = getUserByUsername($conn, $username);
-        disconnect($conn);
+        $user = getUserByUsername($username);
 
         // If the user is found
         if ($user) {
