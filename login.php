@@ -1,5 +1,8 @@
 <?php
     require_once 'db_connect.php';
+    if (session_start() === PHP_SESSION_NONE) {
+        session_start();
+    }
 
     // Get the username and password from the form
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -7,7 +10,9 @@
         $password = $_POST['password'];
 
         // Query to fetch the user by username
-        $user = getUserByUsername($username);
+        $conn = connect();
+        $user = getUserByUsername($conn, $username);
+        disconnect($conn);
 
         // If the user is found
         if ($user) {
