@@ -1,7 +1,13 @@
 <?php
     include_once 'db_connect.php';
     // Fetches most recent posts from the databse
-    $posts = getPosts(10,0);
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    //Fetch most recent posts from the database
+    $conn = connect();
+    $posts = getPosts(3,0);
+    disconnect($conn);
 ?>
 <!DOCTYPE html>
 <html lang="en">

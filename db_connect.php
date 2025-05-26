@@ -20,10 +20,15 @@
         return $conn;
     }
 
+    function getDateFromDateTime($dateTime) {
+        // Convert datetime to date
+        $date = new DateTime($dateTime);
+        return $date->format('Y-m-d');
+    }
+
     // Create a new user
     function insertUser($username, $email, $password) {
         $conn = connect();
-
         //Hash the password
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
@@ -43,6 +48,7 @@
     //Get user by ID
     function getUserByID($userID) {
         $conn = connect();
+        $user = null;
         $sql = "SELECT username FROM `User` WHERE userID = ?";
         $stmt = $conn->prepare($sql);
         if (!$stmt) {
@@ -92,6 +98,39 @@
         return $user;
     }
 
+    //Insert a new post
+    function insertPost($conn, $title, $content, $tags) {
+        $success = false;
+        $userID = intval($_SESSION['userID']);
+        // Insert new post into the database
+        $stmt = $conn->prepare("INSERT INTO `Post` (userID, title, content) VALUES (?, ?, ?)");
+        if (!$stmt) {
+            die("Prepare failed: " . $conn->error);
+        }
+        $stmt->bind_param("iss", $userID, $title, $content);
+        if($stmt->execute()) {
+            $postID = $stmt->insert_id;
+            // Insert tags if provided
+            $tags = explode(',', $tags);
+            if (!empty($tags)) {
+                foreach ($tags as $tagName) {
+                    // Check if tag exists, if not create it
+                    $tag = getTagByName($conn, $tagName);
+                    if (!$tag) {
+                        $tagID = createTag($conn, $tagName);
+                    } else {
+                        $tagID = $tag['tagID'];
+                    }
+                    // Insert into PostTag table
+                    $tagSuccess = createPostTag($conn, $postID, $tagID);
+                    }
+                }
+            $success = true;
+        }
+        $stmt->close();
+        return $success;
+    }
+
     // Get posts given limit and offset
     function getPosts($limit, $offset) {
         $conn = connect();
@@ -116,8 +155,41 @@
         return $posts;
     }
 
+    // Create a new tag
+    function createTag($conn, $name) {
+        $insert_id = null;
+        $name = trim($name);
+        $stmt = $conn->prepare("INSERT INTO `Tag` (name) VALUES (?)");
+        if (!$stmt) {
+            die("Prepare failed: " . $conn->error);
+        }
+        $stmt->bind_param("s", $name);
+        if ($stmt->execute()) {
+            $insert_id = $stmt->insert_id;
+        } else {
+            die("Execute failed: " . $stmt->error);
+        }
+
+        $stmt->close();
+        
+        return $insert_id;
+    }
+
+    function createPostTag($conn, $postID, $tagID) {
+        $success = false;
+        $stmt = $conn->prepare("INSERT INTO `PostTag` (postID, tagID) VALUES (?, ?)");
+        if (!$stmt) {
+            die("Prepare failed: " . $conn->error);
+        }
+        $stmt->bind_param("ii", $postID, $tagID);
+        if ($stmt->execute()) {
+            $success = true;
+        }
+        $stmt->close();
+        return $success;
+    }
+
     function getPostTagsByID($postID) {
-        $conn = connect();
         $sql = "SELECT * FROM `PostTag` WHERE postID = ?";
         $stmt = $conn->prepare($sql);
         if (!$stmt) {
@@ -132,8 +204,23 @@
         return $tags;
     }
 
+    // Get tag by name
+    function getTagByName($conn, $name) {
+        $name = trim($name);
+        $sql = "SELECT * FROM `Tag` WHERE name = ?";
+        $stmt = $conn->prepare($sql);
+        if (!$stmt) {
+            die("Prepare failed: " . $conn->error);
+        }
+        $stmt->bind_param("s", $name);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $tag = $result->fetch_assoc();
+        $stmt->close();
+        return $tag;
+    }
+
     function getTagByID($tagID) {
-        $conn = connect();
         $sql = "SELECT * FROM `Tag` WHERE tagID = ?";
         $stmt = $conn->prepare($sql);
         if (!$stmt) {
