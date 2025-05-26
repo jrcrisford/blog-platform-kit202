@@ -58,6 +58,7 @@
                             </label>
                             <span class="theme-toggle-label">Dark Mode</span>
                         </li>
+                        <?php endif; ?>
 
                     </ul>
                 </div>
