@@ -57,6 +57,7 @@
                             <li><a href="login.php">Login</a></li>
                              <li><a href="register.php">Register</a></li>
                             <?php endif; ?>
+                            <?php endif; ?>
                          <li><a href="our_story.php">Our Story</a></li>
                         
                         <!-- Theme Toggle Switch -->
