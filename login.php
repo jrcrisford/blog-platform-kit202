@@ -31,5 +31,107 @@
             header("Location: login.php?error=user_not_found");
             exit();
         }
+
+        
     }
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="author" content="Joshua Crisford, Anmol Daulyal, Dipen Subedi">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script>// Apply dark mode before styles load to prevent flickering
+            if (localStorage.getItem("theme") === "dark") {document.documentElement.classList.add("dark-mode");}
+        </script> 
+        <link rel="stylesheet" href="css/styles.css">
+        <script src="javascript/validation.js?V=2" defer></script>
+        <script src="javascript/ui_behaviour.js" defer></script>
+        <title>Login Page</title>
+    </head>
+
+    <body>
+        
+        <!-- Navigation Bar -->
+        <div class="navbar-container">
+            <nav class="navbar">
+                <div class="navbar-inner">
+
+                    <!-- Logo -->
+                    <div class="logo">
+                        <a href="index.php">
+                            <img src="logos/horizontal_logo_dark.png" id="site-logo" alt="Logo Horizonal Dark" class="site-logo">
+                        </a>
+                    </div>
+
+                    <!-- Hamburger Menu (for mobile) -->
+                    <button class="hamburger" id="hamburger" aria-label="Toggle navigation">
+                        ☰
+                    </button>
+
+                    <!-- Navigation Links -->
+                    <ul class="nav-links" id="navLinks">
+                        <li><a href="index.php">Homepage</a></li>
+                        <li><a href="older.php">Older Posts</a></li>
+                        <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'author'): ?>
+                            <li><a href="write.php">Write Post</a></li>
+                        <?php endif; ?>
+                        <li><a href="login.php" class="active">Login</a></li>
+                        <li><a href="our_story.php">Our Story</a></li>
+                        
+                        <!-- Theme Toggle Switch -->
+                        <li class="theme-toggle-container">
+                            <label class="theme-toggle">
+                                <input type="checkbox" id="themeSwitch" />
+                                <span class="slider"></span>
+                            </label>
+                            <span class="theme-toggle-label">Dark Mode</span>
+                        </li>
+
+                    </ul>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Page content -->
+        <main class="container">
+            <div class="form-container">
+                <section class="page-header">
+                    <h2>Login</h2>
+                    <p>Enter your credentials</p>
+                </section>
+                
+                <section>
+                    <!-- Login Form -->
+                    <form class="auth-form" id="loginForm" novalidate method="POST" action="login.php">
+
+                        <label for="username">Username:</label>
+                        <input type="text" id="username" name="username">
+                        <span class="error-message" id="username-error"></span>
+
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" name="password">
+                        <span class="error-message" id="password-error"></span>
+
+                        <input type="submit" value="Login">
+
+                        <div class="authorise-links">
+                            <p>
+                                Want to become a member? <a href="register.php">Register Now</a>
+                            </p>
+                        </div>
+                    </form>
+                </section>
+            </div>
+            
+        </main>
+
+        <footer>
+            <p>KIT202 Assignment 1 | Everything Explained</p>
+        </footer>
+
+        <button id="scrollToTopBtn" title="Go to top">↑</button>
+
+    </body>
+</html>

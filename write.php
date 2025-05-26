@@ -1,3 +1,51 @@
+<?php
+    // Include database connection
+    include_once 'db.php';
+
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    // Check if the user is logged in
+    if (!isset($_SESSION['username'])) {
+        // Redirect to login page if not logged in
+        header("Location: login.php");
+        exit();
+    }
+
+    // Check if the user is an author
+    if ($_SESSION['role'] !== 'author') {
+        // Redirect to homepage if not an author
+        header("Location: index.php");
+        exit();
+    }
+    
+    // Handle post creation
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // Get the form data
+        $title = trim($_POST['title']);
+        $tags = trim($_POST['tags']);
+        $content = trim($_POST['content']);
+        
+        $conn = connect();
+        $result = insertPost($conn, $title, $content, $tags);
+        disconnect($conn);
+
+        if ($result) {
+            // Redirect to homepage after successful post creation
+            echo "<script>alert('Post created successfully!');</script>";
+            header("Location: index.php");
+            exit();
+        } else {
+            // Handle error (e.g., display an error message)
+            echo "<script>alert('Error creating post. Please try again.');</script>";
+            header("Location: write.php");
+            exit();
+        }
+    }
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -21,7 +69,7 @@
 
                     <!-- Logo -->
                     <div class="logo">
-                        <a href="index.html">
+                        <a href="index.php">
                             <img src="logos/horizontal_logo_dark.png" id="site-logo" alt="Logo Horizonal Dark" class="site-logo">
                         </a>
                     </div>
@@ -33,11 +81,11 @@
 
                     <!-- Navigation Links -->
                     <ul class="nav-links" id="navLinks">
-                        <li><a href="index.html">Homepage</a></li>
-                        <li><a href="older.html">Older Posts</a></li>
-                        <li><a href="write.html" class="active">Write Post</a></li>
-                        <li><a href="login.html">Login</a></li>
-                        <li><a href="our_story.html">Our Story</a></li>
+                        <li><a href="index.php">Homepage</a></li>
+                        <li><a href="older.php">Older Posts</a></li>
+                        <li><a href="write.php" class="active">Write Post</a></li>
+                        <li><a href="login.php">Login</a></li>
+                        <li><a href="our_story.php">Our Story</a></li>
                         
                         <!-- Theme Toggle Switch -->
                         <li class="theme-toggle-container">
@@ -64,7 +112,7 @@
 
             <!-- Post Creation -->
              <section>
-            <form id="writePostForm" novalidate>
+            <form id="writePostForm" novalidate action="write.php" method="POST">
                 <label for="title">Title:</label>
                 <input type="text" id="title" name="title" maxlength="80">
                 <span class="error-message" id="title-error"></span>
