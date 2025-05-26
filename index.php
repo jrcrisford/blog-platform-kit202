@@ -6,7 +6,7 @@
     }
     //Fetch most recent posts from the database
     $conn = connect();
-    $posts = getPosts(3,0);
+    $posts = getPosts($conn, 3, 0);
     disconnect($conn);
 ?>
 <!DOCTYPE html>
@@ -45,14 +45,16 @@
                     <!-- Navigation Links -->
                     <ul class="nav-links" id="navLinks">
                         <li><a href="index.php" class="active">Homepage</a></li>
-                        <li><a href="older.html">Older Posts</a></li>
-                        <li><a href="write.html">Write Post</a></li>
+                        <li><a href="older.php">Older Posts</a></li>
+                        <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'author'): ?>
+                            <li><a href="write.php">Write Post</a></li>
+                        <?php else: ?>
                         <?php if (isset($_SESSION['username'])): ?>
                             <li>Logged in as <?php echo htmlspecialchars($_SESSION['username']); ?></li>
                             <li><a href="logout.php">Logout</a></li>
                         <?php else: ?>
-                            <li><a href="login.html">Login</a></li>
-                            <li><a href="register.html">Register</a></li>
+                            <li><a href="login.php">Login</a></li>
+                            <li><a href="register.php">Register</a></li>
                         <?php endif; ?>
                         <li><a href="our_story.html">Our Story</a></li>
                         
