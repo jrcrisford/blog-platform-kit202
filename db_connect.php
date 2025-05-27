@@ -112,7 +112,7 @@
         if($stmt->execute()) {
             $postID = $stmt->insert_id;
             // Insert tags if provided
-            $tags = explode(',', $tags);
+            $tags = array_map('trim', explode(',', $tags));
             if (!empty($tags)) {
                 foreach ($tags as $tagName) {
                     // Check if tag exists, if not create it

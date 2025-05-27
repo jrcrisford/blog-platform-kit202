@@ -39,8 +39,6 @@
     }
 ?>
 
-
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -133,6 +131,7 @@
                 <span class="error-message" id="title-error"></span>
 
                 <label for="tags">Tags/Keywords</label>
+                <small>Separate multiple tags with commas (e.g. sport, news, analysis)</small>
                 <input type="text" id="tags" name="tags" placeholder="e.g. Football, Sports">
                 <span class="error-message" id="tags-error"></span>
 
