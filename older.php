@@ -57,12 +57,14 @@
                         <li><a href="index.php">Homepage</a></li>
 
                         <!-- Older Page Link -->
-                        <?php if ($role === 'member' || $role === 'author'): ?>
+                         <!-- Only authors and members can access the older posts -->
+                        <?php if (isset($_SESSION['role'])  && ($_SESSION['role'] === 'member' || $_SESSION['role'] === 'author')): ?>
                         <li><a href="older.php" class="active">Older Posts</a></li>
                         <?php endif; ?>
 
                         <!-- Write Post Link -->
-                        <?php if ($role === 'author'): ?>
+                         <!-- Only authors can access the write post page -->
+                        <?php if (isset($_SESSION['role'] && $_SESSION['role'] === 'author')): ?>
                         <li><a href="write.php">Write Post</a></li>
                         <?php endif; ?>
 
