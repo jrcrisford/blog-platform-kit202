@@ -13,11 +13,13 @@
     }
 
     // Check the user's role
-    if (isset($_SESSION['role']) || $_SESSION['role'] !== 'author') {
+    if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'author') {
         $_SESSION['error_message'] = "You must be logged to view this page.";
         header("Location: index.php");
         exit();
     }
+
+     $role = $_SESSION['role'];
     
     // Handle post creation
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
