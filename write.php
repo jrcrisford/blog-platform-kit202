@@ -5,15 +5,14 @@
     if (session_status() === PHP_SESSION_NONE) {
         session_start();
     }
-    // Check if the user is logged in
-    if (!isset($_SESSION['username'])) {
-        // Redirect to login page if not logged in
-        header("Location: login.php");
-        exit();
-    }
 
     // Check the user's role
     $role = $_SESSION['role'] ?? 'visitor';
+    if ($role === 'visitor') {
+        $_SESSION['error_message'] = "You must be logged to view this page.";
+        header("Location: index.php");
+        exit();
+    }
     
     // Handle post creation
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {

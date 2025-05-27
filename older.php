@@ -6,6 +6,11 @@
 
     // Check the user's role
     $role = $_SESSION['role'] ?? 'visitor';
+    if ($role === 'visitor') {
+        $_SESSION['error_message'] = "You must be logged to view this page.";
+        header("Location: index.php");
+        exit();
+    }
 
     $conn = connect();
     $posts = getPosts(100, 3);
