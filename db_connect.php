@@ -191,6 +191,7 @@
     }
 
     function getPostTagsByID($postID) {
+        $conn = connect();
         $sql = "SELECT * FROM `PostTag` WHERE postID = ?";
         $stmt = $conn->prepare($sql);
         if (!$stmt) {
@@ -222,6 +223,7 @@
     }
 
     function getTagByID($tagID) {
+        $conn = connect();
         $sql = "SELECT * FROM `Tag` WHERE tagID = ?";
         $stmt = $conn->prepare($sql);
         if (!$stmt) {
