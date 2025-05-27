@@ -3,6 +3,10 @@
     if (session_status() === PHP_SESSION_NONE) {
         session_start();
     }
+
+    // Check the user's role
+    $role = $_SESSION['role'] ?? 'visitor';
+
     //Fetch most recent posts from the database
     $conn = connect();
     $posts = getPosts(3, 0);
@@ -44,21 +48,32 @@
 
                     <!-- Navigation Links -->
                     <ul class="nav-links" id="navLinks">
+
+                        <!-- Home Page Link -->
                         <li><a href="index.php" class="active">Homepage</a></li>
+
+                        <!-- Older Page Link -->
+                        <?php if ($role === 'member' || $role === 'author'): ?>
                         <li><a href="older.php">Older Posts</a></li>
-                        <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'author'): ?>
+                        <?php endif; ?>
+
+                        <!-- Write Post Link -->
+                        <?php if ($role === 'author'): ?>
                         <li><a href="write.php">Write Post</a></li>
-                        <?php else: ?>
-                        <?php if (isset($_SESSION['username'])): ?>
+                        <?php endif; ?>
+
+                        <!-- Our Story Page Link -->
+                        <li><a href="our_story.php">Our Story</a></li>
+
+                        <!-- Login/Register/Logout Links -->
+                        <?php if ($role === 'member' || $role === 'author'): ?>
                             <li>Logged in as <?php echo htmlspecialchars($_SESSION['username']); ?></li>
                             <li><a href="logout.php">Logout</a></li>
                         <?php else: ?>
                             <li><a href="login.php">Login</a></li>
                              <li><a href="register.php">Register</a></li>
-                            <?php endif; ?>
-                            <?php endif; ?>
-                         <li><a href="our_story.php">Our Story</a></li>
-                        
+                        <?php endif; ?>
+
                         <!-- Theme Toggle Switch -->
                         <li class="theme-toggle-container">
                             <label class="theme-toggle">

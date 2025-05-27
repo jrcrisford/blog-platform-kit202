@@ -4,6 +4,9 @@
         session_start();
     }
 
+    // Check the user's role
+    $role = $_SESSION['role'] ?? 'visitor';
+
     // Get the username and password from the form
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $username = trim($_POST['username']);
@@ -76,14 +79,32 @@
 
                     <!-- Navigation Links -->
                     <ul class="nav-links" id="navLinks">
+
+                        <!-- Home Page Link -->
                         <li><a href="index.php">Homepage</a></li>
+
+                        <!-- Older Page Link -->
+                        <?php if ($role === 'member' || $role === 'author'): ?>
                         <li><a href="older.php">Older Posts</a></li>
-                        <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'author'): ?>
-                            <li><a href="write.php">Write Post</a></li>
                         <?php endif; ?>
-                        <li><a href="login.php" class="active">Login</a></li>
+
+                        <!-- Write Post Link -->
+                        <?php if ($role === 'author'): ?>
+                        <li><a href="write.php">Write Post</a></li>
+                        <?php endif; ?>
+
+                        <!-- Our Story Page Link -->
                         <li><a href="our_story.php">Our Story</a></li>
-                        
+
+                        <!-- Login/Register/Logout Links -->
+                        <?php if ($role === 'member' || $role === 'author'): ?>
+                            <li>Logged in as <?php echo htmlspecialchars($_SESSION['username']); ?></li>
+                            <li><a href="logout.php">Logout</a></li>
+                        <?php else: ?>
+                            <li><a href="login.php" class="active">Login</a></li>
+                             <li><a href="register.php">Register</a></li>
+                        <?php endif; ?>
+
                         <!-- Theme Toggle Switch -->
                         <li class="theme-toggle-container">
                             <label class="theme-toggle">

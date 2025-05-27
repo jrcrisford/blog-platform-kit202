@@ -12,12 +12,8 @@
         exit();
     }
 
-    // Check if the user is an author
-    if ($_SESSION['role'] !== 'author') {
-        // Redirect to homepage if not an author
-        header("Location: index.php");
-        exit();
-    }
+    // Check the user's role
+    $role = $_SESSION['role'] ?? 'visitor';
     
     // Handle post creation
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -69,7 +65,7 @@
 
                     <!-- Logo -->
                     <div class="logo">
-                        <a href="index.html">
+                        <a href="index.php">
                             <img src="logos/horizontal_logo_dark.png" id="site-logo" alt="Logo Horizonal Dark" class="site-logo">
                         </a>
                     </div>
@@ -81,12 +77,32 @@
 
                     <!-- Navigation Links -->
                     <ul class="nav-links" id="navLinks">
+
+                        <!-- Home Page Link -->
                         <li><a href="index.php">Homepage</a></li>
+
+                        <!-- Older Page Link -->
+                        <?php if ($role === 'member' || $role === 'author'): ?>
                         <li><a href="older.php">Older Posts</a></li>
+                        <?php endif; ?>
+
+                        <!-- Write Post Link -->
+                        <?php if ($role === 'author'): ?>
                         <li><a href="write.php" class="active">Write Post</a></li>
-                        <li><a href="login.php">Login</a></li>
+                        <?php endif; ?>
+
+                        <!-- Our Story Page Link -->
                         <li><a href="our_story.php">Our Story</a></li>
-                        
+
+                        <!-- Login/Register/Logout Links -->
+                        <?php if ($role === 'member' || $role === 'author'): ?>
+                            <li>Logged in as <?php echo htmlspecialchars($_SESSION['username']); ?></li>
+                            <li><a href="logout.php">Logout</a></li>
+                        <?php else: ?>
+                            <li><a href="login.php">Login</a></li>
+                             <li><a href="register.php">Register</a></li>
+                        <?php endif; ?>
+
                         <!-- Theme Toggle Switch -->
                         <li class="theme-toggle-container">
                             <label class="theme-toggle">

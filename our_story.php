@@ -1,3 +1,13 @@
+<?php
+    include_once 'db_connect.php';
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+
+    // Check the user's role
+    $role = $_SESSION['role'] ?? 'visitor';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -33,12 +43,32 @@
 
                     <!-- Navigation Links -->
                     <ul class="nav-links" id="navLinks">
+
+                        <!-- Home Page Link -->
                         <li><a href="index.php">Homepage</a></li>
+
+                        <!-- Older Page Link -->
+                        <?php if ($role === 'member' || $role === 'author'): ?>
                         <li><a href="older.php">Older Posts</a></li>
+                        <?php endif; ?>
+
+                        <!-- Write Post Link -->
+                        <?php if ($role === 'author'): ?>
                         <li><a href="write.php">Write Post</a></li>
-                        <li><a href="login.php">Login</a></li>
+                        <?php endif; ?>
+
+                        <!-- Our Story Page Link -->
                         <li><a href="our_story.php" class="active">Our Story</a></li>
-                        
+
+                        <!-- Login/Register/Logout Links -->
+                        <?php if ($role === 'member' || $role === 'author'): ?>
+                            <li>Logged in as <?php echo htmlspecialchars($_SESSION['username']); ?></li>
+                            <li><a href="logout.php">Logout</a></li>
+                        <?php else: ?>
+                            <li><a href="login.php">Login</a></li>
+                             <li><a href="register.php">Register</a></li>
+                        <?php endif; ?>
+
                         <!-- Theme Toggle Switch -->
                         <li class="theme-toggle-container">
                             <label class="theme-toggle">
