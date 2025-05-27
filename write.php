@@ -13,8 +13,7 @@
     }
 
     // Check the user's role
-    $role = $_SESSION['role'] ?? 'visitor';
-    if ($role === 'visitor') {
+    if (isset($_SESSION['role']) || $_SESSION['role'] !== 'author') {
         $_SESSION['error_message'] = "You must be logged to view this page.";
         header("Location: index.php");
         exit();
