@@ -4,7 +4,7 @@
         session_start();
     }
     $conn = connect();
-    $posts = getPosts(3, 0);
+    $posts = getPosts(100, 3);
     disconnect($conn);
 ?>
 
@@ -88,7 +88,7 @@
                         echo '<div class="post-content hidden">';
                         echo'<p>' . htmlspecialchars($post['content']) . '</p>';
                         echo '</div>';
-                        echo '<p>Posted on' . htmlspecialchars($post['postDate']) . ' by ' . htmlspecialchars($post['author']) . '</p>';
+                        echo '<p>Posted on ' . htmlspecialchars($post['postDate']) . ' by ' . htmlspecialchars($post['author']) . '</p>';
                         echo '<p>';
                             foreach (explode(',', $post['tags']) as $tag){
                                     echo '<span class="tags">' . htmlspecialchars(trim($tag)) . '</span> ';
