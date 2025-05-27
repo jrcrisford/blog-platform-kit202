@@ -64,7 +64,7 @@
 
                         <!-- Write Post Link -->
                          <!-- Only authors can access the write post page -->
-                        <?php if (isset($_SESSION['role'] && $_SESSION['role'] === 'author')): ?>
+                        <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'author'): ?>
                         <li><a href="write.php">Write Post</a></li>
                         <?php endif; ?>
 
