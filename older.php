@@ -4,9 +4,10 @@
         session_start();
     }
     $conn = connect();
-    $posts = getPosts($conn , 3, 3);
+    $posts = getPosts(3, 0);
     disconnect($conn);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>

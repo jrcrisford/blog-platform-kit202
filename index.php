@@ -1,12 +1,11 @@
 <?php
-
     include_once 'db_connect.php';
     if (session_status() === PHP_SESSION_NONE) {
         session_start();
     }
     //Fetch most recent posts from the database
     $conn = connect();
-    $posts = getPosts($conn, 3, 0);
+    $posts = getPosts(3, 0);
     disconnect($conn);
 ?>
 
