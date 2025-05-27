@@ -261,6 +261,11 @@
                             <td>Login and Register Backend Integration</td>
                             <td>Joshua Crisford</td>
                         </tr>
+                        <tr>
+                            <td>2025-05-26</td>
+                            <td>Session Handling and Dynamic Navigation</td>
+                            <td>Joshua Crisford</td>
+                        </tr>
                     </table>
                 </div>
             </section>
@@ -500,6 +505,19 @@
                         <p>
                             To simplify future development, I also created a shared <code>db_connect.php</code> file that handles the database connection.
                             This file can now be included in any PHP script using <code>require_once</code>, removing the need to repeat connection logic in every file.
+                        </p>
+                    </div>
+                </article>
+
+                <article class="blog-post">
+                    <h3>Session Handling and Dynamic Navigation</h3>
+                    <p class="post-meta">Posted on 2025-05-26 by Joshua Crisford</p>
+                    <button onclick="toggleContent(this)">Show Content</button>
+                    <div class="post-content hidden">
+                        <p>
+                            Today I implemented proper session handling across all pages and updated the navigation bar to reflect the user's login state and role.
+                            Users now only see pages they’re allowed to access based on whether they’re a visitor, member, or author.
+                            I also addressed a few smaller issues, including fixing tag handling in the post creation form and clarifying how to enter multiple tags with a user hint.
                         </p>
                     </div>
                 </article>
