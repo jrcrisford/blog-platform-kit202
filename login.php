@@ -14,7 +14,8 @@
 
         // Query to fetch the user by username
         $conn = connect();
-        $user = getUserByUsername($username);
+        $user = getUserByUsername($conn, $username);
+        disconnect($conn);
 
         // If the user is found
         if ($user) {

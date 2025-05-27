@@ -65,7 +65,7 @@
     }
 
     // Get user by Username
-    function getUserByUsername($username) {
+    function getUserByUsername($conn, $username) {
         $conn = connect();
         $sql = "SELECT * FROM `User` WHERE username = ?";
         $stmt = $conn->prepare($sql);
