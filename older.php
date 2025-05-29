@@ -13,7 +13,14 @@
     }
 
     $conn = connect();
-    $posts = getPosts(100, 3);
+    $query = $_GET['search'] ?? '';
+
+    if (!empty($query)) {
+        $posts = searchPosts($conn, $query);
+    } else {
+        $posts = getPosts(100, 3);
+    }
+    
     disconnect($conn);
 ?>
 
@@ -98,15 +105,33 @@
         <main class="container">
             
             <!-- Page Title -->
-             <section class ="page-header">
+            <section class ="page-header">
                 <h2>Older Posts</h2>
-                <p> Here are some of the older posts.</p>
-             </section>
+                <p>View all posts here</p>
+            </section>
+
+            <section class="search-bar">
+                <form method="GET" action="older.php" 
+                    style="display: flex; justify-content: center; margin-bottom: 20px;">
+                    <div style="display: flex; gap: 10px; align-items: center; width: 100%; max-width: 800px;">
+                        <input 
+                            type="text" 
+                            name="search" 
+                            placeholder="Search by title or tag..." 
+                            value="<?php echo htmlspecialchars($_GET['search'] ?? ''); ?>"
+                            style="padding: 10px; flex-grow: 1; font-size: 16px; height: 42px; vertical-align: middle;"
+                        >
+                        <button type="submit" style="height: 38px; font-size: 16px; vertical-align: middle;">Search</button>
+                        <button type="button" onclick="window.location.href='older.php'" style="height: 38px; font-size: 16px; vertical-align: middle;">Clear</button>
+                    </div>
+                </form>
+            </section>
+
 
             <?php
                 if (empty($posts)){
                     echo '<article class="blog-post">';
-                    echo '<p>No older posts available.</p>';
+                    echo '<p>No posts found for search.</p>';
                     echo '</article>';
                 } else {
                     foreach ($posts as $post){

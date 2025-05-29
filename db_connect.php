@@ -238,6 +238,30 @@
         return $tag;
     }
 
+    function searchPosts($conn, $searchTerm) {
+        $likeSearchTerm = '%' . $searchTerm . '%';
+        $sql = "SELECT p.*, u.username AS author, GROUP_CONCAT(t.name SEPARATOR ', ') AS tags
+                FROM `Post` p
+                JOIN `User` u ON p.userID = u.userID
+                LEFT JOIN `PostTag` pt ON p.postID = pt.postID
+                LEFT JOIN `Tag` t ON pt.tagID = t.tagID
+                WHERE p.title LIKE ? OR t.name LIKE ?
+                GROUP BY p.postID
+                ORDER BY p.postDate DESC";
+
+        $stmt = $conn->prepare($sql);
+        if (!$stmt) {
+            die("Failed to prepare statement: " . $conn->error);
+        }
+
+        $stmt->bind_param("ss", $likeSearchTerm, $likeSearchTerm);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $posts = $result->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+        return $posts;
+    }
+
     function disconnect($conn) {
         $conn->close();
     }
