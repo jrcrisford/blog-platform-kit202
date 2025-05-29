@@ -38,7 +38,7 @@
             }
         } else {
             // Redirect to login page if user is not found
-            $_SESSION['error_message'] = "Invalid credentials."
+            $_SESSION['error_message'] = "Invalid credentials.";
             header("Location: login.php");
             exit();
         }
