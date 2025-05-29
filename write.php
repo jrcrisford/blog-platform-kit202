@@ -34,12 +34,12 @@
 
         if ($result) {
         // Redirect to the homepage or display a success message
-            echo "<script>alert('Post created successfully!');</script>";
+            $_SESSION['success_message'] = "Post created successfully!";
             header("Location: index.php");
         exit(); 
         } else {
             // Handle error (e.g., display an error message)
-            echo "<script>alert('Error creating post. Please try again.');</script>";
+            $_SESSION['error_message'] = "Failed to create post. Please try again.";
             header("Location: write.php");
             exit();
         }
@@ -124,6 +124,9 @@
         <!-- Page content start -->
         <main class="container">
 
+        <!-- Display error or success messages -->
+            <?php include_once 'message.php'; ?>
+            
            <div class="form-container">
             <section class="page-header">
                 <h2>Write Post</h2>
