@@ -18,8 +18,8 @@
     //Handle comment submission
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['userID'])) {
         $postId = $_POST['post_id'] ?? null;
-        $comment = $_POST['rating'] ?? null;
-        $username = $_SESSION['comment'] ?? null;
+        $rating = $_POST['rating'] ?? null;
+        $comment = $_SESSION['comment'] ?? null;
 
         if ($postID && $rating && $comment) {
             $conn = connect();
@@ -135,7 +135,7 @@
                 // Display the most recent post
                 if ($posts) {
                     foreach ($posts as $post) {
-                        echo '<article class="blog-post"';
+                        echo '<article class="blog-post">';
                         echo '<h3>' . htmlspecialchars($post['title']) . '</h3>';
                         echo '<div class="post-content">';
                         echo '<p>' . htmlspecialchars($post['content']) . '</p>';
@@ -149,7 +149,7 @@
 
                         //Ratings and Comments
                         $conn = connect();
-                        $comments = getCommentsAndRatingsByPostId($conn, $post['postID']);
+                        $comments = getCommentsAndRatingsByPostID($conn, $post['postID']);
                         disconnect($conn);
 
                         $sectionID = 'comments_' . $post['postID'];
@@ -191,7 +191,7 @@
                 }
             }
                 else {
-                    echo 'article class="blog-post">';
+                    echo '<article class="blog-post">';
                     echo '<p>No posts available.</p>';
                     echo '</article>';
                 }
