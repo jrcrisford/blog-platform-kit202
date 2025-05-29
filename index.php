@@ -12,8 +12,32 @@
 
     //Fetch most recent posts from the database
     $conn = connect();
-    $posts = getPosts($postsPerPage, 0);
+    $posts = getPosts($conn, $postsPerPage, 0);
     disconnect($conn);
+
+    //Handle comment submission
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['userID'])) {
+        $postId = $_POST['post_id'] ?? null;
+        $comment = $_POST['rating'] ?? null;
+        $username = $_SESSION['comment'] ?? null;
+
+        if ($postID && $rating && $comment) {
+            $conn = connect();
+            $userID = $_SESSION['userID'];
+
+            if (insertRating($conn, $userID, $postID, $rating)) {
+                insertComment($conn, $userID, $postID, $comment);
+                $_SESSION['success_message'] = "Comment and rating submitted successfully!";    
+            } else {
+                $_SESSION['error_message'] = "You have already submitted a rating and comment for this post.";
+            }
+
+            disconnect($conn);
+            header("Location: index.php");
+            //Redirect to avoid resubmission of the form
+            exit();
+        }
+    }
 ?>
 
 <!DOCTYPE html>
@@ -95,6 +119,9 @@
         <!-- Page content start -->
         <main class="container">
 
+        <!-- Success/Error Messages -->
+         <?php include 'message.php'; ?>
+
             <!-- Page Title -->
             <section class="page-header">
                 <h2>Homepage</h2>
@@ -119,10 +146,52 @@
                             echo '<span class="tags">' . htmlspecialchars(trim($tag)) . '</span> ';
                         }
                         echo '</p>';
+
+                        //Ratings and Comments
+                        $conn = connect();
+                        $comments = getCommentsAndRatingsByPostId($conn, $post['postID']);
+                        disconnect($conn);
+
+                        $sectionID = 'comments_' . $post['postID'];
+
+                        echo '<div class="comments-wrapper">';
+                        echo '<button class="toggle-comments" onclick="toggleComments(\'' . $sectionID . '\')">Show/Hide Comments & Ratings</button>';
+                        
+                        echo '<div id="' . $sectionID . '" class="comments-section" style="display: none;">';
+                        echo '<h4>Comments and Ratings</h4>';
+
+                        if ($comments !== null && count($comments) > 0) {
+                            foreach ($comments as $comment) {
+                                echo '<div class="comment post-content">';
+                                echo '<p><strong>' . htmlspecialchars($comment['username']) . '</strong> ';
+                                echo 'rated <strong>' . htmlspecialchars($comment['value']) . '/5</strong> ';
+                                echo 'on ' . htmlspecialchars(getDateFromDateTime($comment['commentDate'])) . ' by ' . htmlspecialchars($comment['author']) . '</p>';
+                                echo '<p>' . nl2br(htmlspecialchars($comment['content'])) . '</p>';
+                                echo '</div>';
+                            }
+                        } else {
+                            echo '<p class="post-content">No comments yet.</p>';
+                        }
+
+                        // Comment form (if logged in)
+                         if (isset($_SESSION['userID'])) {
+                            echo '<form action="index.php" method="POST" class="comment-form">';
+                            echo '<input type="hidden" name="postID" value="' . $post['postID'] . '">';
+                            echo '<label>Rating (1-5): <input type="range" name="rating" min="1" max="5" required></label><br>';
+                            echo '<label>Comment:<br><textarea name="comment" rows="4" required></textarea></label><br>';
+                            echo '<button type="submit">Post Comment</button>';
+                            echo '</form>';
+                        } else {
+                            echo '<p><a href="login.php">Login</a> to rate and comment.</p>';
+                        }
+
+                        echo '</div>'; // Close comments-section
+                        echo '</div>'; // Close comments-wrapper
                         echo '</article>';
-                    }
-                } else {
-                    echo '<article class="blog-post">';
+                }
+            }
+                else {
+                    echo 'article class="blog-post">';
                     echo '<p>No posts available.</p>';
                     echo '</article>';
                 }
