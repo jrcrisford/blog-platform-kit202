@@ -12,16 +12,51 @@
         exit();
     }
 
-    $conn = connect();
-    $query = $_GET['search'] ?? '';
+    $LIMIT = 100; //Limit for posts per page
+    $PAGE = 1; //Page number for older posts
 
-    if (!empty($query)) {
-        $posts = searchPosts($conn, $query);
-    } else {
-        $posts = getPosts(100, 3);
-    }
-    
+    $conn = connect();
+    $posts = getPosts($conn, $LIMIT, $PAGE);
     disconnect($conn);
+
+    // Handle comment submission
+
+    if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['userID'])) {
+        $postID = $_POST['postID'] ?? null;
+        $rating = $_POST['rating'] ?? null;
+        $comment = $_POST['comment'] ?? null;
+
+        if ($postID && $rating && $comment) {
+            $conn = connect();
+            $userID = $_SESSION['userID'];
+
+            if (insertRating($conn, $userID, $postID, $rating)) {
+                insertComment($conn, $userID, $postID, $comment);
+                echo "<script>alert('Thank you for your comment and rating!');</script>";
+            } else {
+                $_SESSION['error_message'] = "You have already rated this post.";
+                echo "<script>alert('You have already rated this post.');</script>";
+            }
+
+            disconnect($conn);
+            header("Location: older.php"); // Redirect to avoid resubmission
+            exit();
+        }
+    }
+
+    $searchTerm = '';
+    
+    //Updating the previous search functionality
+    if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['search'])) {
+        $searchTerm = trim($_GET['search']);
+        $conn = connect();
+        $posts = searchPosts($conn, $searchTerm, $LIMIT, 0);
+
+        if (empty($posts)) {
+            $_SESSION['error_message'] = "No posts found for your search term.";
+        }
+        disconnect($conn);
+    }  
 ?>
 
 <!DOCTYPE html>
@@ -103,6 +138,9 @@
 
         <!-- Page content start -->
         <main class="container">
+
+        <!-- Display error or success messages-->
+        <?php include_once 'message.php'; ?>
             
             <!-- Page Title -->
             <section class ="page-header">
@@ -147,6 +185,37 @@
                                     echo '<span class="tags">' . htmlspecialchars(trim($tag)) . '</span> ';
                                 }
                         echo '</p>';
+
+                        //Ratings and comments
+                        $conn = connect();
+                        $comments = getCommentsAndRatingsByPostID($conn, $post['postID']);
+                        disconnect($conn);
+
+                        $sectionID = "comments_" . $post['postID'];
+
+                        echo '<div class="comments-wrapper">';
+                        echo '<button class="toggle-comments" onclick="toggleComments(\'' . $sectionID . '\')">Show/Hide Comments & Ratings</button>';
+
+                        echo '<div id="' . $sectionID . '" class="comments-section" style="display: none;">';
+                        echo '<h4>Comments and Ratings:</h4>';
+
+                        // Comment form (if logged in)
+
+                        if(isset($_SESSION['userID'])) {
+                            echo '<form method="POST" action="older.php" class="comment-form">';
+                            echo '<input type="hidden" name="postID" value="' . $post['postID'] . '">';
+                            echo '<label>Rating (1-5): <input type="range" name="rating" min="1" max="5" required></label><br>';
+                            echo '<label>Comment:<br><textarea name="comment" rows="4" required></textarea></label><br>';
+                            echo '<button type="submit">Post Comment</button>';
+                            echo '</form>';
+                        } else {
+                            echo '<p><a href="login.php">Login</a> to rate and comment.</p>';
+                        }
+
+                        echo '</div>'; // Close comments section
+                        echo '</div>'; // Close comments wrapper
+
+
                         echo '</article>';
                     }
                 }
