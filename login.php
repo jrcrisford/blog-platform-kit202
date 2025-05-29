@@ -1,5 +1,5 @@
 <?php
-    require_once 'db_connect.php';
+    include_once 'db_connect.php';
     if (session_status() === PHP_SESSION_NONE) {
         session_start();
     }
@@ -27,16 +27,19 @@
                 $_SESSION['role'] = $user['role'];
                 
                 // Redirect to home page
+                $_SESSION['success_message'] = "Login successful! Welcome, " . htmlspecialchars($user['username']) . ".";
                 header("Location: index.php");
                 exit();
             } else {
                 // Redirect to login page if password is incorrect
-                header("Location: login.php?error=Invalid password");
+                $_SESSION['error_message'] = "Invalid credentials.";
+                header("Location: login.php");
                 exit();
             }
         } else {
             // Redirect to login page if user is not found
-            header("Location: login.php?error=user_not_found");
+            $_SESSION['error_message'] = "Invalid credentials."
+            header("Location: login.php");
             exit();
         }
 
@@ -122,6 +125,8 @@
 
         <!-- Page content -->
         <main class="container">
+            <!-- Display error or success message -->
+             <?php include_once 'message.php'; ?>
             <div class="form-container">
                 <section class="page-header">
                     <h2>Login</h2>
