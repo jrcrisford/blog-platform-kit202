@@ -5,7 +5,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 // Check if there is an error message in the session
 if (isset($_SESSION['error_message'])) {
-    $error_message = $_SESSION['error_messsage'];
+    $error_message = $_SESSION['error_message'];
     unset($_SESSION['error_message']); // Clear error message after displaying
 } else {
     $error_message = null;
@@ -14,7 +14,7 @@ if (isset($_SESSION['error_message'])) {
 
 // Check if there is an success message in the session
 if (isset($_SESSION['success_message'])) {
-    $success_message = $_SESSION['success_messsage'];
+    $success_message = $_SESSION['success_message'];
     unset($_SESSION['success_message']); // Clear success message after displaying
 } else {
     $success_message = null;
