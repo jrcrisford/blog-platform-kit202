@@ -263,9 +263,34 @@
                             <td>Joshua Crisford</td>
                         </tr>
                         <tr>
+                            <td>2025-05-25</td>
+                            <td>Updated the site to handle user insertion retrieve posts with tags and author</td>
+                            <td>Dipen Subedi</td>
+                        </tr>
+                        <tr>
+                            <td>2025-05-25</td>
+                            <td>Modified the code writtehn by Josh with improved logic</td>
+                            <td>Dipen Subedi</td>
+                        </tr>
+                        <tr>
+                            <td>2025-05-25</td>
+                            <td>Added password verification and session management to redirect users upon successful or failed login attempts.</td>
+                            <td>Dipen Subedi</td>
+                        </tr>
+                        <tr>
+                            <td>2025-05-25</td>
+                            <td>Modified and added logic to display each post's author and tags by retrieving user and tag details dynamically for each post.</td>
+                            <td>Dipen Subedi</td>
+                        </tr>
+                        <tr>
                             <td>2025-05-26</td>
                             <td>Session Handling and Dynamic Navigation</td>
                             <td>Joshua Crisford</td>
+                        </tr>
+                        <tr>
+                            <td>2025-05-26</td>
+                            <td>Added post creation functionality with automatic tag handling, including functions to create tags, associate them with posts, and extract dates from datetime values.</td>
+                            <td>Dipen Subedi</td>
                         </tr>
                         <tr>
                             <td>2025-05-26</td>
@@ -283,9 +308,19 @@
                             <td>Anmol Daulyal</td>
                         </tr>
                         <tr>
+                            <td>2025-05-28</td>
+                            <td>Updated and modified navigation role checks for better session validation</td>
+                            <td>Dipen Subedi</td>
+                        </tr>
+                        <tr>
                             <td>2025-05-29</td>
                             <td>Success and error messages, comments and ratings functions added</td>
                             <td>Anmol Daulyal</td>
+                        </tr>
+                        <tr>
+                            <td>2025-05-30</td>
+                            <td>Added support for comment and rating submission with form handling, user session checks, dynamic comment display per post, and a collapsible comments section with input form for logged-in users.</td>
+                            <td>Dipen Subedi</td>
                         </tr>
                     </table>
                 </div>
@@ -531,6 +566,22 @@
                 </article>
 
                 <article class="blog-post">
+                    <h3>Implementation of User Authentication and Post Retrieval System</h3>
+                    <p class="post-meta">Posted on 2025-05-25 by Dipen Subedi</p>
+                    <button onclick="toggleContent(this)">Show Content</button>
+                    <div class="post-content hidden">
+                        <p>
+                            In this development phase, I implemented essential backend functionalities for user registration, login, and post retrieval in the db_connect.php, register.php, and 
+                            login.php files. I began by enabling session management and creating a reusable connect() function for MySQLi connections. I then added the insertUser() function to securely
+                            store user data with hashed passwords and a default role of 'member'. To support data access, I developed helper functions like getUserByID(), getUserByUsername(), and getUserByEmail(), 
+                            all using prepared statements for security. For post handling, I built the getPosts() function to fetch recent posts, enriched with author names and tags through supporting helper functions. 
+                            I also added disconnect() to ensure clean database connection closures. In register.php, I modified Josh’s code to improve modularity and maintainability. I added checks for existing usernames 
+                            and emails using the new helper functions and handled user feedback accordingly. On successful registration, users are redirected to the login page. Finally, I completed the login.php logic using password_verify() and set up session variables upon successful login, with clear error handling for failed attempts.
+                        </p>
+                    </div>
+                </article>
+
+                <article class="blog-post">
                     <h3>Session Handling and Dynamic Navigation</h3>
                     <p class="post-meta">Posted on 2025-05-26 by Joshua Crisford</p>
                     <button onclick="toggleContent(this)">Show Content</button>
@@ -558,6 +609,16 @@
                     </div>
                 </article>
 
+                <article class="blog-post">
+                    <h3>Implementation of Post Insertion and Tag Management System</h3>
+                    <p class="post-meta">Posted on 2025-05-26 by Dipen Subedi</p>
+                    <button onclick="toggleContent(this)">Show Content</button>
+                    <div class="post-content hidden">
+                        <p>
+                        In this stage, I implemented post creation functionality with support for tagging. The insertPost() function was developed to allow logged-in users to add new posts, which are then linked to the database using prepared statements for security. Tags can be attached to each post—these are either fetched using getTagByName() or created using createTag() if they don’t exist. The createPostTag() function then associates each tag with the corresponding post. I also added a getDateFromDateTime() utility to extract date values cleanly from datetime entries. Additionally, I ensured proper session handling and fetched the three most recent posts on page load via getPosts() for display. This modular approach improves code maintainability and data integrity</p>
+                    </div>
+                </article>
+
                 
                 <article class="blog-post">
                     <h3>Session Handling and Dynamic Navigation</h3>
@@ -571,6 +632,17 @@
                     </div>
                 </article>
 
+                <article class="blog-post">
+                    <h3>Bug Fixes and Functional Testing</h3>
+                    <p class="post-meta">Posted on 2025-05-28 by Dipen Subedi</p>
+                    <button onclick="toggleContent(this)">Show Content</button>
+                    <div class="post-content hidden">
+                        <p>
+                        During this stage, I fixed some bugs and performed testing by checking different sections of the site to ensure everything was functioning properly.
+                    </p>
+                    </div>
+                </article>
+
                  <article class="blog-post">
                     <h3>Success and error messages handling, comment and rating functionality</h3>
                     <p class="post-meta">Posted on 2025-05-29 by Anmol Daulyal</p>
@@ -581,6 +653,28 @@
                         </p>
                         <p>
                             I also added rating and commenting functionality to the posts and leave comments which are stored in the DB and rating system is also added.
+                    </div>
+                </article>
+
+                <article class="blog-post">
+                    <h3>Commenting & Ratings Integration & Bug Troubleshooting</h3>
+                    <p class="post-meta">Posted on 2025-05-30 by Dipen Subedi</p>
+                    <button onclick="toggleContent(this)">Show Content</button>
+                    <div class="post-content hidden">
+                        <p>
+                          This development cycle implemented comment and rating functionality across index.php
+                          ,older.php, including session management, database operations, and JavaScript UI toggles.
+                        The implementation worked perfectly in Microsoft Edge but encountered significant issues in Chrome, where form submissions behaved inconsistently and comments failed to post properly despite identical code execution. </p>
+                        <p>
+                        Key Changes:<br>
+                        </p>
+                        index.php - Added comment submission with POST handling, session validation, and database inserts. Fixed $_POST['post_id'] field mismatch causing Chrome issues. Implemented toggle-comments section with authentication restrictions.
+                        older.php - Applied similar functionality plus search capabilities and pagination. Added user notifications and redirect logic to prevent resubmission.
+                        write.php - Added session messaging for post creation feedback.
+                        content_toggle.js - Created toggleComments(id) function for consistent cross-browser comment visibility control.
+                        <p>
+                        This development revealed notable cross-browser compatibility challenges in form handling and session management. While most functionality is stable, Chrome's inconsistent behavior requires further investigation.
+                        </p>
                     </div>
                 </article>
 

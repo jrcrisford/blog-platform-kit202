@@ -7,7 +7,7 @@
     // Check the user's role
     $role = $_SESSION['role'] ?? 'visitor';
 
-    $postsPerPage = 5;
+    $postsPerPage = 3;
 
 
     //Fetch most recent posts from the database
