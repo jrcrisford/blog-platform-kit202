@@ -28,7 +28,7 @@
     }
 
     // Create a new user
-    function insertUser($username, $email, $password) {
+    function insertUser($conn, $username, $email, $password) {
         $conn = connect();
         //Hash the password
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
@@ -39,16 +39,11 @@
             die("Prepare failed: " . $conn->error);
         }
         $stmt->bind_param("sss", $username, $email, $hashedPassword);
-        if($stmt->execute()) {
-            return true;
-        } else {
-            return false;
-        }
+       return $stmt->execute();
     }
 
     //Get user by ID
-    function getUserByID($userID) {
-        $conn = connect();
+    function getUserByID($conn, $userID) {
         $user = null;
         $sql = "SELECT username FROM `User` WHERE userID = ?";
         $stmt = $conn->prepare($sql);
@@ -60,13 +55,11 @@
         $result = $stmt->get_result();
         $user = $result->fetch_assoc();
         $stmt->close();
-        disconnect($conn);
         return $user;
     }
 
     // Get user by Username
     function getUserByUsername($conn, $username) {
-        $conn = connect();
         $sql = "SELECT * FROM `User` WHERE username = ?";
         $stmt = $conn->prepare($sql);
         if (!$stmt) {
@@ -77,14 +70,12 @@
         $result = $stmt->get_result();
         $user = $result->fetch_assoc();
         $stmt->close();
-        disconnect($conn);
         return $user;
     }
 
 
     //Get user by email
-    function getUserByEmail($email) {
-        $conn = connect();
+    function getUserByEmail($conn, $email) {
         $sql = "SELECT * FROM `User` WHERE email = ?";
         $stmt = $conn->prepare($sql);
         if (!$stmt) {
@@ -95,7 +86,6 @@
         $result = $stmt->get_result();
         $user = $result->fetch_assoc();
         $stmt->close();
-        disconnect($conn);
         return $user;
     }
 
@@ -133,8 +123,7 @@
     }
 
     // Get posts given limit and offset
-    function getPosts($limit, $offset) {
-        $conn = connect();
+    function getPosts($conn, $limit, $offset) {
         $sql = "SELECT p.*, u.username AS author, GROUP_CONCAT(t.name SEPARATOR ', ') AS tags
         FROM `Post` p
         JOIN `User` u ON p.userID = u.userID
@@ -152,10 +141,9 @@
         $result = $stmt->get_result();
         $posts = $result->fetch_all(MYSQLI_ASSOC);
         $stmt->close();
-        disconnect($conn);
         return $posts;
     }
-
+    
     // Create a new tag
     function createTag($conn, $name) {
         $insert_id = null;
@@ -190,8 +178,7 @@
         return $success;
     }
 
-    function getPostTagsByID($postID) {
-        $conn = connect();
+    function getPostTagsByID($conn, $postID) {
         $sql = "SELECT * FROM `PostTag` WHERE postID = ?";
         $stmt = $conn->prepare($sql);
         if (!$stmt) {
@@ -202,7 +189,6 @@
         $result = $stmt->get_result();
         $tags = $result->fetch_all(MYSQLI_ASSOC);
         $stmt->close();
-        disconnect($conn);
         return $tags;
     }
 
@@ -222,8 +208,7 @@
         return $tag;
     }
 
-    function getTagByID($tagID) {
-        $conn = connect();
+    function getTagByID($conn, $tagID) {
         $sql = "SELECT * FROM `Tag` WHERE tagID = ?";
         $stmt = $conn->prepare($sql);
         if (!$stmt) {
@@ -234,10 +219,10 @@
         $result = $stmt->get_result();
         $tag = $result->fetch_assoc();
         $stmt->close();
-        disconnect($conn);
         return $tag;
     }
 
+    // Search posts by title and content 
     function searchPosts($conn, $searchTerm) {
         $likeSearchTerm = '%' . $searchTerm . '%';
         $sql = "SELECT p.*, u.username AS author, GROUP_CONCAT(t.name SEPARATOR ', ') AS tags
@@ -262,6 +247,76 @@
         return $posts;
     }
 
+    function insertComment($conn, $userID, $postID, $comment){
+        $success = false;
+        // Insert comment 
+        $stmt = $conn->prepare("INSERT INTO `Comment` (userID, postID, content) VALUES (?, ?, ?)");
+        if (!$stmt) {
+            die("Prepare failed: " . $conn->error);
+        }
+        $stmt->bind_param("iis", $userID, $postID, $comment);
+        if ($stmt->execute()) {
+            $success = true;
+        }
+        $stmt->close();
+        return $success;
+    }
+
+    function insertRating($conn, $userID, $postID, $rating){
+        $success = false;
+        // Update post rating
+        $existingRating = getRatingByPostIDAndUserID($conn, $postID, $userID);
+        if ($existingRating != null){
+            return $success; // If user already rated the post
+        }
+        $stmt = $conn->prepare("INSERT INTO `Rating`(userID, postID, value) VALUES (?, ?, ?)");
+        if (!$stmt) {
+            die("Prepare Failed: " . $conn->error);
+        }
+        $stmt->bind_param("iii", $userID, $postID, $rating);
+        if ($stmt->execute()) {
+            $success = true;
+        }
+        $stmt->close();
+        return $success;
+    }
+
+    function getRatingByPostIDAndUserID($conn, $postID, $userID ) {
+        $rating = null;
+        $sql = "SELECT value FROM `Rating` WHERE postID = ? AND userID = ?";
+         $stmt = $conn->prepare($sql);
+        if (!$stmt) {
+            die("Prepare failed: " . $conn->error);
+        }
+        $stmt->bind_param("ii", $postID, $userID);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows > 0) {
+            $rating = $result->fetch_assoc();
+        }
+        $stmt->close();
+        return $rating;
+    }
+
+    function getCommentsAndRatingsByPostID($conn, $postID){
+        $sql = "SELECT c.commentID, c.content, c.postID, c.userID, u.username AS author, r.value
+                FROM `Comment` c
+                JOIN `User` u ON c.userID = u.userID
+                LEFT JOIN `Rating` r ON c.postID = r.postID AND c.userID = r.userID
+                WHERE c.postID = ?
+                ORDER BY c.commentDate DESC";
+         $stmt = $conn->prepare($sql);
+        if (!$stmt) {
+            die("Prepare failed: " . $conn->error);
+        }
+        $stmt->bind_param("i", $postID);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $CommentsAndRating = $result->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+        return $CommentsAndRating;
+    }
+    
     function disconnect($conn) {
         $conn->close();
     }
