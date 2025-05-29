@@ -17,9 +17,9 @@
 
     //Handle comment submission
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['userID'])) {
-        $postId = $_POST['post_id'] ?? null;
+        $postID = $_POST['postID'] ?? null;
         $rating = $_POST['rating'] ?? null;
-        $comment = $_SESSION['comment'] ?? null;
+        $comment = $_POST['comment'] ?? null;
 
         if ($postID && $rating && $comment) {
             $conn = connect();
@@ -50,6 +50,7 @@
             if (localStorage.getItem("theme") === "dark") {document.documentElement.classList.add("dark-mode");}
         </script> 
         <link rel="stylesheet" href="css/styles.css">
+        <script src="javascript/content_toggle.js" defer></script>
         <script src="javascript/ui_behaviour.js" defer></script>
         <title>Homepage</title>
     </head>
