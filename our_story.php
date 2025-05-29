@@ -147,6 +147,7 @@
                         <li>Generating the README file</li>
                         <li>Generating sample blog post content for placeholder use</li>
                         <li>Generating the site logo png files</li>
+                        <li>Debugging of chunks of code</li>
                     </ul>
 
                     <br>
@@ -265,6 +266,26 @@
                             <td>2025-05-26</td>
                             <td>Session Handling and Dynamic Navigation</td>
                             <td>Joshua Crisford</td>
+                        </tr>
+                        <tr>
+                            <td>2025-05-26</td>
+                            <td>DB integration, restrucure and fetching homepage posts from database</td>
+                            <td>Anmol Daulyal</td>
+                        </tr>
+                        <tr>
+                            <td>2025-05-26</td>
+                            <td>Retrieve older psts from the database</td>
+                            <td>Anmol Daulyal</td>
+                        </tr>
+                        <tr>
+                            <td>2025-05-27</td>
+                            <td>Integrated role based navigation</td>
+                            <td>Anmol Daulyal</td>
+                        </tr>
+                        <tr>
+                            <td>2025-05-29</td>
+                            <td>Success and error messages, comments and ratings functions added</td>
+                            <td>Anmol Daulyal</td>
                         </tr>
                     </table>
                 </div>
@@ -521,6 +542,48 @@
                         </p>
                     </div>
                 </article>
+
+                 <article class="blog-post">
+                    <h3>Loading older posts from database</h3>
+                    <p class="post-meta">Posted on 2025-05-26 by Anmol Daulyal</p>
+                    <button onclick="toggleContent(this)">Show Content</button>
+                    <div class="post-content hidden">
+                        <p>
+                           Refactored the function for retrieving posts from DB to use JOIN queries to fetch the author and tags in a single query. This changes improved performance and reduced the number of queries needed to display posts.
+                        </p>
+                        <p>
+                            The older posts page now dynamically loads psts from the DB making use of the function described above to fetch posts. Apart from that I faced problems while working on older.html file. I wamted to change it into a php but I was denied request so I committed it as an html and my partner Joshua fixed it next morning.
+                        </p>
+
+                    </div>
+                </article>
+
+                
+                <article class="blog-post">
+                    <h3>Session Handling and Dynamic Navigation</h3>
+                    <p class="post-meta">Posted on 2025-05-27 by Anmol Daulyal</p>
+                    <button onclick="toggleContent(this)">Show Content</button>
+                    <div class="post-content hidden">
+                        <p>
+                           Focused on the navigation of the write post page to restrict authors. Also, merged multiple html files to create the php files to control the access of the write page in the navigation.
+                           Fixed multiple files containing referencing issus.
+                        </p>
+                    </div>
+                </article>
+
+                 <article class="blog-post">
+                    <h3>Success and error messages handling, comment and rating functionality</h3>
+                    <p class="post-meta">Posted on 2025-05-29 by Anmol Daulyal</p>
+                    <button onclick="toggleContent(this)">Show Content</button>
+                    <div class="post-content hidden">
+                        <p>
+                           I implemented success and error message handling across sites using PHp sessions. Created message.php to show messages accordingly to the users interaction with the webpage.
+                        </p>
+                        <p>
+                            I also added rating and commenting functionality to the posts and leave comments which are stored in the DB and rating system is also added.
+                    </div>
+                </article>
+
 
             </section>
 
