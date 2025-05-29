@@ -602,3 +602,21 @@ textarea {
   width: 100%;
   box-sizing: border-box;
 }
+
+.error-message {
+  color: #ff6b6b;
+  font-size: 0.9em;
+  font-weight: bold;
+  margin-top: 5px;
+  margin-left: 8px;
+  display: inline;
+}
+
+.success-message {
+  color: #348146;
+  font-size: 0.9em;
+  font-weight: bold;
+  margin-top: 5px;
+  margin-left: 8px;
+  display: inline;
+}
