@@ -20,22 +20,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($existingUser) {
 
         if ($existingUser['username'] === $username) {
-            header("Location: register.html?error=username_taken");
+            $_SESSION['error_message'] = 'Username already taken';
+            header("Location: register.php");
             exit();
         }
 
         if ($existingUser['email'] === $email) {
-            header("Location: register.html?error=email_taken");
+            $_SESSION['error_message'] = 'Email already taken';
+            header("Location: register.php");
             exit();
         }
     }
 
     if (insertUser($username, $email, $password)) {
         // Registration successful
-        header("Location: login.html?registered=1");
+        $_SESSION['success_message'] = 'Registration successful. You can now log in.';
+        header("Location: login.php");
     } else {
         // Registration failed
-        header("Location: register.html?error=registration_failed");
+        $_SESSION['error_message'] = 'Registration failed. Please try again..';
+        header("Location: register.php");
     }
     disconnect($conn);
 
@@ -120,6 +124,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <!--Page Content-->
 
         <main class="container">
+
+        <!-- Display error or success messages -->
+            <?php include_once 'message.php'; ?>
             
            <div class="form-container">
                 <section class="page-header">
