@@ -85,7 +85,7 @@
                     <ul class="nav-links" id="navLinks">
 
                         <!-- Home Page Link -->
-                        <li><a href="index.php">Homepage</a></li>
+                        <li><a href="index.php" class="active">Homepage</a></li>
 
                         <!-- Older Page Link -->
                         <?php if ($role === 'member' || $role === 'author'): ?>

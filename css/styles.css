@@ -129,7 +129,7 @@ main{
   display: flex;
   flex-direction: row;
   justify-content: center;
-  padding: 1rem 2rem;
+  padding: 0.5rem 1.5rem;
   align-items: center;
   background: rgba(10, 25, 47, 0.4);
   color: white;
@@ -156,7 +156,7 @@ main{
 }
 
 .logo img{
-  width: 250px;
+  width: 180px;
   max-width: 100%;
   object-fit: contain;
   display: block;
@@ -604,7 +604,7 @@ textarea {
 }
 
 .error-message {
-  color: #ff6b6b;
+  color: #792323;
   font-size: 0.9em;
   font-weight: bold;
   margin-top: 5px;

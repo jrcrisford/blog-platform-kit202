@@ -69,7 +69,7 @@
             if (localStorage.getItem("theme") === "dark") {document.documentElement.classList.add("dark-mode");}
         </script> 
         <link rel="stylesheet" href="css/styles.css">
-        <script src="javascript/content_toggle.js" defer></script>
+        <script src="javascript/content_toggle.js?V=2" defer></script>
         <script src="javascript/ui_behaviour.js" defer></script>
         <title>Older Posts Page</title>
     </head>
