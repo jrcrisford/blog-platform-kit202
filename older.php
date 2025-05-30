@@ -13,7 +13,7 @@
     }
 
     $LIMIT = 100; //Limit for posts per page
-    $PAGE = 1; //Page number for older posts
+    $PAGE = 0; //Page number for older posts
 
     $conn = connect();
     $posts = getPosts($conn, $LIMIT, $PAGE);
@@ -21,42 +21,42 @@
 
     // Handle comment submission
 
-    if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['userID'])) {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['userID'])) {
         $postID = $_POST['postID'] ?? null;
-        $rating = $_POST['rating'] ?? null;
-        $comment = $_POST['comment'] ?? null;
+        $userID = $_SESSION['userID'];
+        $rating = isset($_POST['rating']) && $_POST['rating'] !== '' ? $_POST['rating'] : null;
+        $comment = isset($_POST['comment']) && trim($_POST['comment']) !== '' ? trim($_POST['comment']) : null;
 
-        if ($postID && $rating && $comment) {
-            $conn = connect();
-            $userID = $_SESSION['userID'];
-
-            if (insertRating($conn, $userID, $postID, $rating)) {
-                insertComment($conn, $userID, $postID, $comment);
-                echo "<script>alert('Thank you for your comment and rating!');</script>";
-            } else {
-                $_SESSION['error_message'] = "You have already rated this post.";
-                echo "<script>alert('You have already rated this post.');</script>";
-            }
-
-            disconnect($conn);
-            header("Location: older.php"); // Redirect to avoid resubmission
-            exit();
-        }
-    }
-
-    $searchTerm = '';
-    
-    //Updating the previous search functionality
-    if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['search'])) {
-        $searchTerm = trim($_GET['search']);
         $conn = connect();
-        $posts = searchPosts($conn, $searchTerm, $LIMIT, 0);
+        $success = false;
 
-        if (empty($posts)) {
-            $_SESSION['error_message'] = "No posts found for your search term.";
+        if (iset($_POST['submitRating'])) {
+            if ($rating !== null) {
+                if (insertRating($conn, $userID, $postID, $rating)) {
+                    $_SESSION['success_message'] = "Rating submitted!";
+                    $success = true;
+                } else {
+                    $_SESSION['error_message'] = "You have already rated this post.";
+                }
+            } else {
+                $_SESSION['error_message'] = "Please select a rating before submitting.";
+            }
         }
+
+        if (isset($_POST['submitComment'])) {
+            if ($comment !== null) {
+                insertComment($conn, $userID, $postID, $comment);
+                $_SESSION['success_message'] = "Comment submitted!";
+                $success = true;
+            } else {
+                $_SESSION['error_message'] = "Please enter a comment before submitting.";
+            }
+        }
+
         disconnect($conn);
-    }  
+        header("Location: older.php");
+        exit();
+    }
 ?>
 
 <!DOCTYPE html>
@@ -203,9 +203,21 @@
                             foreach ($comments as $comment) {
                                 echo '<div class="comment post-content">';
                                 echo '<p><strong>' . htmlspecialchars($comment['username']) . '</strong>';
-                                echo ' rated this post <strong>' . htmlspecialchars($comment['value']) . '/5</strong> ';
-                                echo 'on ' . htmlspecialchars(getDateFromDateTime($comment['commentDate'])) . '</p>';
-                                echo '<p>' . nl2br(htmlspecialchars($comment['content'])) . '</p>';
+
+                                if (isset($comment['rating'])) {
+                                    echo ' rated this post <strong>' . htmlspecialchars($comment['rating']) . '/5</strong> ';
+                                }
+                                
+                                if (isset($comment['commentDate'])) {
+                                    echo 'on ' . htmlspecialchars(getDateFromDateTime($comment['commentDate'])) . '</p>';
+                                } 
+                                
+                                echo '<p>';
+                                
+                                if (isset($comment['content']) && !empty($comment['content'])) {
+                                    echo '<p>' . nl2br(htmlspecialchars($comment['content'])) . '</p>';
+                                }
+
                                 echo '</div>';
                             }
                         } else {
@@ -215,12 +227,24 @@
                         // Comment form (if logged in)
 
                         if(isset($_SESSION['userID'])) {
-                            echo '<form method="POST" action="older.php" class="comment-form">';
+                            echo '<form method="POST" action="older.php" class="comment-form" style="max-width: 100%; margin-bottom: 40px;">';
                             echo '<input type="hidden" name="postID" value="' . $post['postID'] . '">';
-                            echo '<label>Rating (1-5): <input type="range" name="rating" min="1" max="5" required></label><br>';
-                            echo '<label>Comment:<br><textarea name="comment" rows="4" required></textarea></label><br>';
-                            echo '<button type="submit">Post Comment</button>';
+
+                            echo '<div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 20px;">';
+                            echo '  <input type="range" id="rating_' . $post['postID'] . '" name="rating" min="1" max="5" value="3" ';
+                            echo '    style="width: 200px; max-width: 100%; margin: 0;" ';
+                            echo '    oninput="document.getElementById(\'ratingValue_' . $post['postID'] . '\').textContent = this.value + \'/5\'">';
+                            echo '  <span id="ratingValue_' . $post['postID'] . '" style="min-width: 40px; text-align: center;">3/5</span>';
+                            echo '  <button type="submit" name="submitRating" style="height: 36px; margin-top: 2px;">Post Rating</button>';
+                            echo '</div>';
+
+                            echo '<div style="width: 100%; max-width: 1000px; padding: 0 1rem; margin: 0 auto;">';
+                            echo '<textarea name="comment" rows="6" placeholder="Write your comment here..." style="width: 100%; min-height: 150px; resize: vertical; font-size: 1rem;"></textarea>';
+                            echo '</div>';
+
+                            echo '<button type="submit" name="submitComment" style="height: 36px;">Post Comment</button>';
                             echo '</form>';
+
                         } else {
                             echo '<p><a href="login.php">Login</a> to rate and comment.</p>';
                         }

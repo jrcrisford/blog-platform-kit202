@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    if (insertUser($username, $email, $password)) {
+    if (insertUser($conn, $username, $email, $password)) {
         // Registration successful
         $_SESSION['success_message'] = 'Registration successful. You can now log in.';
         header("Location: login.php");

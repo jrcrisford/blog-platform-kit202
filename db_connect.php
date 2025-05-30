@@ -29,7 +29,6 @@
 
     // Create a new user
     function insertUser($conn, $username, $email, $password) {
-        $conn = connect();
         //Hash the password
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
@@ -298,29 +297,79 @@
         return $rating;
     }
 
-    function getCommentsAndRatingsByPostID($conn, $postID){
-        $sql = "SELECT 
-                    u.username AS username,
-                    c.commentDate,
-                    c.content,
-                    r.value
-                FROM `Comment` c
-                JOIN `User` u ON c.userID = u.userID
-                LEFT JOIN `Rating` r ON r.userID = c.userID AND r.postID = c.postID
-                WHERE c.postID = ?
-                ORDER BY c.commentDate DESC";
+    function getCommentsAndRatingsByPostID($conn, $postID) {
+        $comments = [];
+        $ratings = [];
 
-        $stmt = $conn->prepare($sql);
+        $commentSql = "SELECT u.username, c.commentDate, c.content
+                       FROM `Comment` c
+                       JOIN `User` u ON c.userID = u.userID
+                       WHERE c.postID = ?
+                       ORDER BY c.commentDate DESC";
+
+        // Get comments for post
+        $stmt = $conn->prepare($commentSql);
         if (!$stmt) {
             die("Prepare failed: " . $conn->error);
         }
         $stmt->bind_param("i", $postID);
         $stmt->execute();
         $result = $stmt->get_result();
-        $CommentsAndRating = $result->fetch_all(MYSQLI_ASSOC);
+        while ($row = $result->fetch_assoc()) {
+            $key = $row['username'];
+            $comments[$key] = $row;
+        }
         $stmt->close();
-        return $CommentsAndRating;
+
+        $ratingSql = "SELECT u.username, r.value AS rating
+                        FROM `Rating` r
+                        JOIN `User` u ON r.userID = u.userID
+                        WHERE r.postID = ?";
+        
+        $stmt = $conn->prepare($ratingSql);
+        if (!$stmt) {
+            die("Prepare failed: " . $conn->error);
+        }
+        $stmt->bind_param("i", $postID);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        while ($row = $result->fetch_assoc()) {
+            $key = $row['username'];
+            if (!isset($comments[$key])) {
+                // No comment, just a rating
+                $comments[$key] = ['username' => $key];
+            }
+            $comments[$key]['rating'] = $row['rating'];
+        }
+        $stmt->close();
+
+        return array_values($comments); 
     }
+
+
+    // function getCommentsAndRatingsByPostID($conn, $postID){
+    //     $sql = "SELECT 
+    //                 u.username AS username,
+    //                 c.commentDate,
+    //                 c.content,
+    //                 r.value AS rating
+    //             FROM `Comment` c
+    //             JOIN `User` u ON c.userID = u.userID
+    //             LEFT JOIN `Rating` r ON r.userID = c.userID AND r.postID = c.postID
+    //             WHERE c.postID = ?
+    //             ORDER BY c.commentDate DESC";
+
+    //     $stmt = $conn->prepare($sql);
+    //     if (!$stmt) {
+    //         die("Prepare failed: " . $conn->error);
+    //     }
+    //     $stmt->bind_param("i", $postID);
+    //     $stmt->execute();
+    //     $result = $stmt->get_result();
+    //     $CommentsAndRating = $result->fetch_all(MYSQLI_ASSOC);
+    //     $stmt->close();
+    //     return $CommentsAndRating;
+    // }
     
     function disconnect($conn) {
         $conn->close();
