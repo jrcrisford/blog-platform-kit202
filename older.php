@@ -16,7 +16,13 @@
     $PAGE = 0; //Page number for older posts
 
     $conn = connect();
-    $posts = getPosts($conn, $LIMIT, $PAGE);
+    if (isset($_GET['search']) && trim($_GET['search']) !== '') {
+        $searchTerm = trim($_GET['search']);
+        $posts = searchPosts($conn, $searchTerm);
+    } else {
+        $posts = getPosts($conn, $LIMIT, $PAGE);
+    }
+
     disconnect($conn);
 
     // Handle comment submission
@@ -30,7 +36,7 @@
         $conn = connect();
         $success = false;
 
-        if (iset($_POST['submitRating'])) {
+        if (isset($_POST['submitRating'])) {
             if ($rating !== null) {
                 if (insertRating($conn, $userID, $postID, $rating)) {
                     $_SESSION['success_message'] = "Rating submitted!";

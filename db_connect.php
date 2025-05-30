@@ -229,7 +229,7 @@
                 JOIN `User` u ON p.userID = u.userID
                 LEFT JOIN `PostTag` pt ON p.postID = pt.postID
                 LEFT JOIN `Tag` t ON pt.tagID = t.tagID
-                WHERE p.title LIKE ? OR t.name LIKE ?
+                WHERE p.title LIKE ? OR IFNULL(t.name, '') LIKE ?
                 GROUP BY p.postID
                 ORDER BY p.postDate DESC";
 
