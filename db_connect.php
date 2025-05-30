@@ -299,13 +299,18 @@
     }
 
     function getCommentsAndRatingsByPostID($conn, $postID){
-        $sql = "SELECT c.commentID, c.content, c.postID, c.userID, u.username AS author, r.value
+        $sql = "SELECT 
+                    u.username AS username,
+                    c.commentDate,
+                    c.content,
+                    r.value
                 FROM `Comment` c
                 JOIN `User` u ON c.userID = u.userID
-                LEFT JOIN `Rating` r ON c.postID = r.postID AND c.userID = r.userID
+                LEFT JOIN `Rating` r ON r.userID = c.userID AND r.postID = c.postID
                 WHERE c.postID = ?
                 ORDER BY c.commentDate DESC";
-         $stmt = $conn->prepare($sql);
+
+        $stmt = $conn->prepare($sql);
         if (!$stmt) {
             die("Prepare failed: " . $conn->error);
         }

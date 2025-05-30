@@ -199,6 +199,19 @@
                         echo '<div id="' . $sectionID . '" class="comments-section" style="display: none;">';
                         echo '<h4>Comments and Ratings:</h4>';
 
+                        if ($comments !== null && count($comments) > 0) {
+                            foreach ($comments as $comment) {
+                                echo '<div class="comment post-content">';
+                                echo '<p><strong>' . htmlspecialchars($comment['username']) . '</strong>';
+                                echo ' rated this post <strong>' . htmlspecialchars($comment['value']) . '/5</strong> ';
+                                echo 'on ' . htmlspecialchars(getDateFromDateTime($comment['commentDate'])) . '</p>';
+                                echo '<p>' . nl2br(htmlspecialchars($comment['content'])) . '</p>';
+                                echo '</div>';
+                            }
+                        } else {
+                            echo '<p>No comments or ratings yet.</p>';
+                        }
+
                         // Comment form (if logged in)
 
                         if(isset($_SESSION['userID'])) {

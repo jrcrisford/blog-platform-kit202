@@ -166,7 +166,7 @@
                                 echo '<div class="comment post-content">';
                                 echo '<p><strong>' . htmlspecialchars($comment['username']) . '</strong> ';
                                 echo 'rated <strong>' . htmlspecialchars($comment['value']) . '/5</strong> ';
-                                echo 'on ' . htmlspecialchars(getDateFromDateTime($comment['commentDate'])) . ' by ' . htmlspecialchars($comment['author']) . '</p>';
+                                echo 'on ' . htmlspecialchars(getDateFromDateTime($comment['commentDate'])) . ' by ' . htmlspecialchars($comment['username']) . '</p>';
                                 echo '<p>' . nl2br(htmlspecialchars($comment['content'])) . '</p>';
                                 echo '</div>';
                             }
