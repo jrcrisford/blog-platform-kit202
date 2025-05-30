@@ -13,7 +13,7 @@
     }
 
     $LIMIT = 100; //Limit for posts per page
-    $PAGE = 0; //Page number for older posts
+    $PAGE = 3; //Page number for older posts
 
     $conn = connect();
     if (isset($_GET['search']) && trim($_GET['search']) !== '') {

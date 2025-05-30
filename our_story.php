@@ -135,7 +135,7 @@
 
                     <h3>Use of generative AI</h3>
                     <p>
-                        Generative AI tools, such as ChatGPT by OpenAI and Copilot, were used minimally throughout this project to assist with:
+                        Generative AI tools, such as ChatGPT by OpenAI and Copilot, were used minimally throughout Assignment 1 and 2 to assist with:
                     </p>
                     <br>
                     <ul>
@@ -148,20 +148,39 @@
                         <li>Generating sample blog post content for placeholder use</li>
                         <li>Generating the site logo png files</li>
                         <li>Debugging of chunks of code</li>
+                        <li>All website posts were written by ChatGPT</li>
                     </ul>
 
                     <br>
 
                     <h3>HD Level Enhancements</h3>
-                    <p>The following high distinction-level features were implemented to enhance functionality, usability, and design consistency across the blog platform.</p>
+                    <p>
+                        The following high distinction-level features were implemented to enhance functionality, usability, and design consistency across the blog platform.
+                        Features marked under Assignment 1 were implemented in the first phase of development, while features noted under Assignment 2 were added in the second phase.
+                    </p>
                     <br>
                     <ul>
-                        <li><strong>Dark Mode Toggle</strong> – A fully functional dark mode switch that saves user preference using <code>localStorage</code> and updates both theme and logo accordingly.</li>
-                        <li><strong>Responsive Navigation</strong> – Includes a hamburger menu for mobile views and flexible layout using CSS media queries. Also supports full mobile use.</li>
-                        <li><strong>Glassmorphism Design</strong> – Modern visual style with layered backgrounds, blur effects, and soft shadows for a sleek, polished aesthetic.</li>
-                        <li><strong>Reusable Form Validation Script</strong> – A single <code>validation.js</code> file handles input validation across multiple pages with real-time feedback.</li>
-                        <li><strong>Dynamic Logo Switching</strong> – The header logo image dynamically updates to match the selected theme (dark/light).</li>
+                        <li><strong>Dark Mode Toggle</strong> – <em>(AT1)</em> A fully functional dark mode switch that saves user preference using <code>localStorage</code> and updates both theme and logo accordingly.</li>
+                        <li><strong>Responsive Navigation</strong> – <em>(AT1)</em> Includes a hamburger menu for mobile views and flexible layout using CSS media queries. Also supports full mobile use.</li>
+                        <li><strong>Glassmorphism Design</strong> – <em>(AT1)</em> Modern visual style with layered backgrounds, blur effects, and soft shadows for a sleek, polished aesthetic.</li>
+                        <li><strong>Reusable Form Validation Script</strong> – <em>(AT1)</em> A single <code>validation.js</code> file handles input validation across multiple pages with real-time feedback.</li>
+                        <li><strong>Dynamic Logo Switching</strong> – <em>(AT1)</em> The header logo image dynamically updates to match the selected theme (dark/light).</li>
+                        <li><strong>Post Rating System</strong> – <em>(AT2)</em> Logged-in users can rate posts from 1–5 stars, with each user restricted to one rating per post.</li>
+                        <li><strong>Commenting System</strong> – <em>(AT2)</em> Logged-in users can submit comments on individual posts, with timestamps and display of commenter usernames.</li>
+                        <li><strong>Search Functionality</strong> – <em>(AT2)</em> Posts on the "Older Posts" page can be filtered by keywords in their title or tags using a search bar.</li>
                     </ul>
+
+                    <br>
+
+                    <h3>Tools and Techniques Used</h3>
+                    <p>
+                        The project was developed using a combination of HTML, CSS, JavaScript, and PHP for the frontend and backend functionality.
+                        The database was designed using MySQL, with phpMyAdmin used for management.
+                        The site was styled using CSS with a focus on glassmorphism design principles.
+                        JavaScript was used for client-side interactivity, including form validation and dynamic content toggling.
+                        The project also utilised Git for version control and collaboration.
+                    </p>
+
                 </div>
             </section>
 
@@ -321,6 +340,11 @@
                             <td>2025-05-30</td>
                             <td>Added support for comment and rating submission with form handling, user session checks, dynamic comment display per post, and a collapsible comments section with input form for logged-in users.</td>
                             <td>Dipen Subedi</td>
+                        </tr>
+                        <tr>
+                            <td>2025-05-30</td>
+                            <td>Final Development Pass</td>
+                            <td>Joshua Crisford</td>
                         </tr>
                     </table>
                 </div>
@@ -678,6 +702,26 @@
                     </div>
                 </article>
 
+                <article class="blog-post">
+                    <h3>Final Development Pass</h3>
+                    <p class="post-meta">Posted on 2025-05-30 by Joshua Crisford</p>
+                    <button onclick="toggleContent(this)">Show Content</button>
+                    <div class="post-content hidden">
+                        <p>
+                            Getting toward the deadline for submission, today I focused on implementing the final piece of functionality, the search bar.
+                            This allows users to filter posts by title or tag on the Older Post page.
+                            This ended up requiring a lot of debugging, like constantly changing the SQL logic to make it actually work,
+                            as well as fixing issues that caused searches to return no results.
+                            I also worked on fixing the toggle comments button, which previously failed to consistently show or hide the comments section.
+                            Another key bug fix was resolving why comments weren’t displaying, which was caused by problems in how user ratings and comments were being merged.
+                        </p>
+                        <p>
+                            After the fixes, I did a full project pass to ensure we were meeting all assignment requirements.
+                            I also updated the Our Story page to reflect the new information required in assignment 2.
+                            Overall, the final polish ensured everything was working as intended and that the presentation was clean and consistent.
+                        </p>
+                    </div>
+                </article>
 
             </section>
 
